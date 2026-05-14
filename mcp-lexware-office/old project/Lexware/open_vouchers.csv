@@ -1,0 +1,172 @@
+#,id,contactName,voucherNumber,voucherDate,totalAmount,_tax_rates,voucherStatus,_category
+1,44720787-5a83-43de-a563-3221d66821e2,Metro Deutschland GmbH,01. 04. 2026/658/0/0/0521/013168,2026-04-01T00:00:00.000+02:00,617.34,7% / 19%,paid,Material/Waren > Wareneinkauf
+2,2301e842-e17b-40c9-992c-9301bd2eb344,Lidl,1884,2026-03-31T00:00:00.000+02:00,14.64,7% / 19%,paid,Material/Waren > Wareneinkauf
+3,7f646ff0-b5be-42de-82a7-9791e9f83c31,Aldi,335850,2026-03-31T00:00:00.000+02:00,59.42,7% / 19%,paid,Material/Waren > Wareneinkauf
+4,64699cdf-acb6-40c7-b4fc-084c98278ed5,Aldi,0727,2026-03-30T00:00:00.000+02:00,34.15,19%,paid,Material/Waren > Wareneinkauf
+5,470145cc-950f-4c44-861b-2b4443ad0ab5,Mrap GmbH,HCM3455063,2026-03-29T00:00:00.000+01:00,20.9,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+6,3175aeef-19ce-4d0b-aa82-b637955b2334,Metro Deutschland GmbH,28. 03. 2026/036/0/0/0501/017336,2026-03-28T00:00:00.000+01:00,125.55,19%,paid,Material/Waren > Wareneinkauf
+7,91abf366-a419-4c18-bea7-439566e79dfc,Lidl,3351 411512/04,2026-03-27T00:00:00.000+01:00,19.89,7% / 19%,paid,Material/Waren > Wareneinkauf
+8,066bb463-eae9-4d9b-a6f3-60430b7fa397,Firma Rohr-Fuxx - Rohr- & Kanalreinigungs GmbH,20260924,2026-03-26T00:00:00.000+01:00,544.35,19%,paid,Raumkosten > Sonstige Raumkosten
+9,5a0d22cb-0832-46c7-ab91-48714dd63743,Metro Deutschland GmbH,26. 03. 2026/658/0/0/0521/011954,2026-03-26T00:00:00.000+01:00,254.87,7%,paid,Material/Waren > Wareneinkauf
+10,cee64105-dde8-4570-a69b-c8da47ecb883,Wolfmarkt GmbH,6713,2026-03-26T00:00:00.000+01:00,32.0,7%,paid,Material/Waren > Wareneinkauf
+11,575c1f3d-84de-4735-b841-296a1bd306b2,Wolf Markt GmbH,1571830,2026-03-26T00:00:00.000+01:00,35.95,19%,paid,Material/Waren > Wareneinkauf
+12,90b61bcc-4387-494a-8cb4-b6db13a790e1,Lsw Energle Gmbh & Co. KG,AM 4201158117,2026-03-25T00:00:00.000+01:00,250.0,19%,paid,"Raumkosten > Strom, Wasser, Gas"
+13,dbb6d6d3-8edd-4c48-9df5-744f30a542be,Metro Deutschland GmbH,24. 03. 2026/658/0/0/0521/011711,2026-03-24T00:00:00.000+01:00,218.34,7% / 19%,paid,Material/Waren > Wareneinkauf
+14,98d7f7fc-b5c2-423c-8127-fc333785a415,Metro Deutschland GmbH,23. 03. 2026/658/0/0/0521/011517,2026-03-23T00:00:00.000+01:00,355.54,19%,paid,Material/Waren > Wareneinkauf
+15,036ec4ef-c909-495f-8a2f-965af042b4c8,Finanzamt Gifhorn,LG-2026-03-084,2026-03-23T00:00:00.000+01:00,733.91,0%,paid,Zu zahlen > Lohn-und Kirchensteuer
+16,13e31abf-722e-4772-bd0e-0e620e0e4f84,Star Tankstelle,34548,2026-03-22T00:00:00.000+01:00,50.13,19%,paid,Fahrzeug > Kraftstoff/Ladestrom
+17,cd0fe604-658f-4749-870c-48491a5ead9b,Wolfmarkt GmbH,1570523,2026-03-21T00:00:00.000+01:00,171.24,7%,paid,Material/Waren > Wareneinkauf
+18,3ed082fd-1516-43fb-92b3-6a81268c42f0,Sumup,5100209029,2026-03-20T00:00:00.000+01:00,19.0,0%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+19,06eb730e-1e5b-4f48-bc2a-820d3bd6af7e,Ionos Se,100183261440,2026-03-19T00:00:00.000+01:00,5.0,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+20,89826e16-8e01-45e3-814f-a975c27c0204,Metro Deutschland GmbH,19. 03. 2026/658/0/0/0521/011014,2026-03-19T00:00:00.000+01:00,160.86,7% / 19%,paid,Material/Waren > Wareneinkauf
+21,9e281af9-82a8-4031-b61a-b3b32140bf59,Lidl,3351 732211/02,2026-03-19T00:00:00.000+01:00,27.94,7% / 19%,paid,Material/Waren > Wareneinkauf
+22,3343f979-c597-4302-a104-c787b76b1f98,Ströer Deutsche Städte Medien GmbH,6906575322,2026-03-18T00:00:00.000+01:00,260.61,19%,paid,Werbung > Anzeigen Print- und Online
+23,0091ab9c-6ecd-4695-8481-37395379a515,hkk,LG-2026-03-082,2026-03-18T00:00:00.000+01:00,1173.64,0%,paid,Zu zahlen > Sozialversicherungsbeiträge
+24,9787363b-6c18-4fd5-aad6-5634975fd6ec,Knappschaft (allg. Verf. einschl. Minijobs),LG-2026-03-083,2026-03-18T00:00:00.000+01:00,582.66,0%,paid,Zu zahlen > Sozialversicherungsbeiträge
+25,14611608-82b2-4fa2-a009-33493ee78f07,Ströer Deutsche Städte Medien GmbH,6906575322,2026-03-18T00:00:00.000+01:00,260.61,19%,paid,Werbung > Anzeigen Print- und Online
+26,e309bb73-86cb-43af-be20-209eda7434e3,Metro Deutschland GmbH,18. 03. 2026/658/0/0/0521/010749,2026-03-18T00:00:00.000+01:00,383.48,7% / 19%,paid,Material/Waren > Wareneinkauf
+27,6bcd70fc-118a-49b5-8beb-54e5ef89b8ae,Techniker Krankenkasse,LG-2026-03-081,2026-03-18T00:00:00.000+01:00,1406.79,0%,paid,Zu zahlen > Sozialversicherungsbeiträge
+28,14d8acdb-7141-4664-8b81-3d509d2450c2,Vodafone GmbH,101210975302,2026-03-17T00:00:00.000+01:00,71.28,19%,paid,Telekommunikation > Internet
+29,2522e22a-4e1c-44e6-87fb-c6fe27b87c98,Google Commerce,358840222267348-8,2026-03-15T00:00:00.000+01:00,21.99,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+30,ed195f78-5c67-4318-918f-967e628a914d,"Amazon Eu S.À R.I., Niederlassung Deutschland",DE6X2Q1VAEUI,2026-03-14T00:00:00.000+01:00,27.18,19%,paid,Material/Waren > Wareneinkauf
+31,49c36885-fa2e-449f-ad15-ee8486209fb6,Zhuhaishiqianmaidianzishangwuyouxiangongsi,DE6000AWQF3XBI,2026-03-14T00:00:00.000+01:00,16.95,19%,paid,Material/Waren > Wareneinkauf
+32,e54e4eb9-1d72-4da4-9a1c-895f69628c41,Aldi,6176,2026-03-14T00:00:00.000+01:00,14.64,7% / 19%,paid,Material/Waren > Wareneinkauf
+33,97029656-115f-40a6-96ff-78b73e6ebea6,Amazon Eu S.A.R.L.,PL617UYQAEUI,2026-03-13T00:00:00.000+01:00,19.46,0%,paid,Material/Waren > Wareneinkauf
+34,a2f6812e-85b1-4345-8604-ae6151785b68,Metro Deutschland GmbH,13. 03. 2026/658/0/0/0521/009972,2026-03-13T00:00:00.000+01:00,380.27,7% / 19%,paid,Material/Waren > Wareneinkauf
+35,c3f9b600-26de-480f-a15d-709507b18713,Metro Deutschland GmbH,13. 03. 2026/658/0/0/0521/010133,2026-03-13T00:00:00.000+01:00,262.18,7% / 19%,paid,Material/Waren > Wareneinkauf
+36,fcb3829d-8c73-4000-ad66-8f6a70a90f3f,Haufe Service Center GmbH,lx2026030214186,2026-03-12T00:00:00.000+01:00,73.54,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+37,cbfd4352-3379-47ad-9449-b2a93b16e51e,Star Tankstelle,7343,2026-03-12T00:00:00.000+01:00,115.1,19%,paid,Fahrzeug > Kraftstoff/Ladestrom
+38,ec0efcbb-e6b9-490a-aff6-26fa68b0b094,Wolfmarkt GmbH,1567283,2026-03-12T00:00:00.000+01:00,234.04,7%,paid,Material/Waren > Wareneinkauf
+39,a403a7d5-cf57-41b7-b58f-0ba2569f24d9,Freenet,M26016655139,2026-03-10T00:00:00.000+01:00,15.38,19%,paid,Telekommunikation > Festnetz
+40,58698c31-76f2-4c91-af51-7f8f0d29a15d,Freenet,M26017004193,2026-03-10T00:00:00.000+01:00,15.22,19%,paid,Telekommunikation > Festnetz
+41,fc5f6a35-24a5-46e2-a6c4-88b3cae3b28c,Metro Deutschland GmbH,10. 03. 2026/658/0/0/0521/009483,2026-03-10T00:00:00.000+01:00,262.03,7%,paid,Material/Waren > Wareneinkauf
+42,746cee32-e3f8-43fd-968e-24d0add02e44,Gema,7116728254,2026-03-08T00:00:00.000+01:00,86.82,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+43,b05e2b00-b5b8-4246-a976-33e7aa69f834,E Center Bahrs,7133,2026-03-07T00:00:00.000+01:00,26.09,19%,paid,Material/Waren > Wareneinkauf
+44,a09bc030-7c68-4c71-a7bd-8ec97c43d55c,Metro Deutschland GmbH,07. 03. 2026/658/0/0/0521/009212,2026-03-07T00:00:00.000+01:00,132.25,7% / 19%,paid,Material/Waren > Wareneinkauf
+45,6a0a115e-fa54-49eb-906b-c5a1b733da3d,Lidl,3351 577065/01,2026-03-07T00:00:00.000+01:00,64.11,19%,paid,Material/Waren > Wareneinkauf
+46,95b71383-cf9e-459e-8882-cc3105996536,Getränke-Höpfner Voll-Service GmbH,R080083678,2026-03-06T00:00:00.000+01:00,462.55,19%,paid,Material/Waren > Wareneinkauf
+47,1f113d5d-3f1a-4cb6-b2a6-400d8f63a27a,Xiamen Jinsheng Dianzishangwu Youxian Gongsi,DE60005122YGXI,2026-03-06T00:00:00.000+01:00,17.99,19%,paid,Material/Waren > Wareneinkauf
+48,92914b6e-7623-4618-a0d9-6b2d38b59165,Amazon,DE6SR6GUAEUI,2026-03-06T00:00:00.000+01:00,12.39,19%,paid,Material/Waren > Wareneinkauf
+49,13557419-d596-494f-92c9-a56e92a98a87,Otto Oehme GmbH,DE600737GV9SPI,2026-03-06T00:00:00.000+01:00,49.99,19%,paid,Material/Waren > Wareneinkauf
+50,e216fe4d-e866-4689-99a6-9d9186eddaac,"Amazon Eu S.À R.I., Niederlassung Deutschland",DE6SQ9KUAEUI,2026-03-06T00:00:00.000+01:00,14.0,19%,paid,Material/Waren > Wareneinkauf
+51,b52a8af8-9e5f-49d7-9c99-f39d0d814202,Metro Deutschland GmbH,03. 03. 2026/658/0/0/0521/008362,2026-03-03T00:00:00.000+01:00,362.87,7% / 19%,paid,Material/Waren > Wareneinkauf
+52,70a75868-8aa6-45a1-941a-d65cd1177845,Metro Deutschland GmbH,03. 03. 2026/658/0/0/0521/008475,2026-03-03T00:00:00.000+01:00,168.62,7%,paid,Material/Waren > Wareneinkauf
+53,b95ec3b7-6b94-4916-ac52-188c13f99d6c,"Refood Gmbh & Co. Kg,",10757688,2026-03-02T00:00:00.000+01:00,185.38,19%,paid,Raumkosten > Müllgebühren
+54,949a051e-1b53-4953-9299-e741999d6e04,Sas Olinda,03-26-invoice-32382100,2026-03-01T00:00:00.000+01:00,26.4,19%,paid,Zinsen/Gebühren > Nebenkosten des Geldverkehrs
+55,3cc041ee-f843-4e7e-802d-0d22c11fabd0,E Center Bahrs,4300,2026-02-28T00:00:00.000+01:00,23.98,19%,paid,Material/Waren > Wareneinkauf
+56,fc7a836c-a49c-476e-ac6c-ca5da735cf6a,Mrap GmbH,HCM3410197,2026-02-28T00:00:00.000+01:00,20.9,0%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+57,d7c241a9-d483-453a-8107-8372aec2e0e5,Aldi,1728,2026-02-28T00:00:00.000+01:00,23.88,7% / 19%,paid,Material/Waren > Wareneinkauf
+58,86d6dba4-237c-4682-81d4-8912fb637be6,Wolfmarkt GmbH,1563447,2026-02-28T00:00:00.000+01:00,136.12,7%,paid,Material/Waren > Wareneinkauf
+59,a4e79eb7-3959-44d9-92d2-849553f5414d,Luoyang Hengshu Shangmao Youxian Gongsi,PL60002L4WWDVI,2026-02-26T00:00:00.000+01:00,5.42,0%,paid,Material/Waren > Wareneinkauf
+60,26dacd5f-3950-4ccd-a9e6-b4b208e74483,Guangzhoumengbianxinxikejiyouxiangongsi,PL60009Q3CLCPI,2026-02-26T00:00:00.000+01:00,25.2,0%,paid,Material/Waren > Wareneinkauf
+61,029cb8fc-afe2-468d-87a9-6d7ac5af04ee,Luoyang Hengshu Shangmao Youxian Gongsi,PL60002L4WWDVI,2026-02-26T00:00:00.000+01:00,5.42,0%,paid,Material/Waren > Wareneinkauf
+62,1d2699b2-d150-4a9b-b4a2-13994dd3eb94,Dominik Watzinger Dominik Watzinger,DE601AQQ0CJD5I,2026-02-26T00:00:00.000+01:00,22.75,19%,paid,Material/Waren > Wareneinkauf
+63,61a83a70-2273-4b50-bdf3-f4743955a810,Metro Deutschland GmbH,24. 02. 2026/658/0/0/0521/007385,2026-02-24T00:00:00.000+01:00,384.81,7% / 19%,paid,Material/Waren > Wareneinkauf
+64,b2f180e7-75d6-4d04-afda-a99b1470f446,Finanzamt Gifhorn,LG-2026-02-079,2026-02-23T00:00:00.000+01:00,524.91,0%,paid,Zu zahlen > Lohn-und Kirchensteuer
+65,80ebdda6-19f5-4da8-a2e2-102883b9d417,Techniker Krankenkasse,LG-2026-02-077,2026-02-22T00:00:00.000+01:00,1404.93,0%,paid,Zu zahlen > Sozialversicherungsbeiträge
+66,f6cf19e7-e637-4e59-b369-db7770a47d09,Knappschaft (allg. Verf. einschl. Minijobs),LG-2026-02-080,2026-02-22T00:00:00.000+01:00,799.34,0%,paid,Zu zahlen > Sozialversicherungsbeiträge
+67,f8da9822-07d5-49b1-b665-0fa1fcb8cc22,Metro Deutschland GmbH,21.02.2026/658/0/0/0502/000274,2026-02-21T00:00:00.000+01:00,228.2,7% / 19%,paid,Material/Waren > Wareneinkauf
+68,79d2fadb-386b-4a3e-a308-af1041d23c59,Sumup,5100201377,2026-02-20T00:00:00.000+01:00,19.0,0%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+69,d903bc67-21ad-4325-b0e8-114bf1f4a5ff,Ionos Se,100181345398,2026-02-19T00:00:00.000+01:00,5.0,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+70,354430c2-6a55-483e-9e86-91b730dfa992,Metro Deutschland GmbH,INV/2026/00023,2026-02-18T00:00:00.000+01:00,419.19,7%,paid,Material/Waren > Wareneinkauf
+71,5b7ffebd-79e3-4d3e-a2ba-7b40c5056907,Beeketal,2026-08228,2026-02-17T00:00:00.000+01:00,194.9,19%,paid,Sonstige Ausgaben > Anschaffungen
+72,0a86a845-3855-4961-b38a-0f6d07284b28,Vodafone GmbH,101203886626,2026-02-17T00:00:00.000+01:00,71.28,19%,paid,Telekommunikation > Internet
+73,81cab66f-238b-4a56-b0fd-35ad828f293b,Wolf Markt Gmbh I.G.,1558806,2026-02-17T00:00:00.000+01:00,171.09,7%,paid,Material/Waren > Wareneinkauf
+74,40f8b1d5-6ee4-43bb-a640-9818fad90342,Metro Deutschland GmbH,17. 02. 2026/658/0/0/0521/006422,2026-02-17T00:00:00.000+01:00,199.22,7% / 19%,paid,Material/Waren > Wareneinkauf
+75,332b66b2-3751-434f-9fa0-1c6c96be38f0,Aldi,8131,2026-02-16T00:00:00.000+01:00,71.55,7% / 19%,paid,Material/Waren > Wareneinkauf
+76,d066e392-0ec7-49aa-8a3d-831b8d660ab9,Metro Deutschland GmbH,16. 02. 2026/658/0/0/0521/006254,2026-02-16T00:00:00.000+01:00,554.7,7% / 19%,paid,Material/Waren > Wareneinkauf
+77,f9617946-d4f7-41d8-9f26-0a1b9ee5c801,Ströer Deutsche Städte Medien GmbH,6906544401,2026-02-15T00:00:00.000+01:00,260.61,19%,paid,Werbung > Anzeigen Print- und Online
+78,db605fbe-0f14-4148-917d-a9f90b60ff47,Google Commerce,358840222267348-7,2026-02-15T00:00:00.000+01:00,21.99,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+79,f8a98b9b-9d8e-40b6-a7cb-2000d5c9cc96,Aldi,7607,2026-02-14T00:00:00.000+01:00,35.66,7% / 19%,paid,Material/Waren > Wareneinkauf
+80,08ad02b6-0749-4513-9bb5-59d133fd4021,Documaxx Hessler Digitaldruck GmbH,4522,2026-02-13T00:00:00.000+01:00,34.4,19%,paid,Werbung > Anzeigen Print- und Online
+81,a66b5759-fc04-4032-81c3-9da68201bd52,Metro Deutschland GmbH,13. 02. 2026/658/0/0/0521/005812,2026-02-13T00:00:00.000+01:00,110.27,7% / 19%,paid,Material/Waren > Wareneinkauf
+82,077cb77c-8d4f-409c-9aac-bbc2f619b436,Haufe Service Center GmbH,lx2026020185821,2026-02-12T00:00:00.000+01:00,57.87,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+83,85ac459e-178d-4fae-bd47-93a7a36ef0ff,"Dipl.-Kfm. Frank Rusche. Steuerberater,",2026000060,2026-02-12T00:00:00.000+01:00,291.55,19%,paid,Beratung > Beratung
+84,423186f5-90dd-4212-88ad-e08850bc0446,Bundesanzeiger Verlag GmbH,97890500,2026-02-12T00:00:00.000+01:00,96.27,19%,paid,Werbung > Anzeigen Print- und Online
+85,06f8fb24-2756-4b15-864a-05b71e8cf1a4,Star Tankstelle,7649,2026-02-11T00:00:00.000+01:00,94.4,19%,paid,Fahrzeug > Kraftstoff/Ladestrom
+86,4e728c98-8ec2-4373-9cb0-b9e615f1ddc2,Freenet,M26009582585,2026-02-10T00:00:00.000+01:00,14.99,19%,paid,Telekommunikation > Festnetz
+87,07940270-ba94-4aa8-ac9b-6399a27973cb,Freenet,M26009910205,2026-02-10T00:00:00.000+01:00,14.99,19%,paid,Telekommunikation > Festnetz
+88,f88c2b9e-3aaa-436e-8f87-762495061667,Wolf Markt Gmbh Ig,1556718,2026-02-10T00:00:00.000+01:00,127.0,7%,paid,Material/Waren > Wareneinkauf
+89,4d72465a-e49b-443e-bb8e-f6910a1ff63c,Metro Deutschland GmbH,10. 02. 2026/658/0/0/0521/005320,2026-02-10T00:00:00.000+01:00,584.99,7% / 19%,paid,Material/Waren > Wareneinkauf
+90,9749a985-2fd6-4ef8-8a09-9e24fdd3915c,Lidl,3351 409314/04,2026-02-10T00:00:00.000+01:00,54.51,19%,paid,Material/Waren > Wareneinkauf
+91,967c66e0-0de5-4a44-995b-ff4135d54151,Documaxx Hessler Digitaldruck GmbH,4356,2026-02-06T00:00:00.000+01:00,12.0,19%,paid,Werbung > Anzeigen Print- und Online
+92,b0b83d9f-292c-462a-9281-ae489970635b,Wirmachendruck GmbH,34396803-6,2026-02-06T00:00:00.000+01:00,47.89,19%,paid,Werbung > Werbung
+93,dce8e40f-e60f-4c45-a4e4-67f8eae95c70,Metro Deutschland GmbH,06. 02. 2026/658/0/0/0521/004760,2026-02-06T00:00:00.000+01:00,281.05,7% / 19%,paid,Material/Waren > Wareneinkauf
+94,835f52bc-e137-4921-b63d-ae98d62311d4,Aldi,4480,2026-02-03T00:00:00.000+01:00,48.04,7%,paid,Material/Waren > Wareneinkauf
+95,73ad9b4d-8c6c-4bae-82db-e18f0a3f1386,Metro Deutschland GmbH,03. 02. 2026/658/0/0/0521/004377,2026-02-03T00:00:00.000+01:00,268.35,7% / 19%,paid,Material/Waren > Wareneinkauf
+96,9196f9f6-d502-45ea-88ff-bf80d975254a,"Refood Gmbh & Co. Kg,",10752442,2026-02-02T00:00:00.000+01:00,185.38,19%,paid,Raumkosten > Müllgebühren
+97,e0d83783-ff22-446e-93eb-04fd96325478,Wolf Markt Gmbh I G,1554325,2026-02-02T00:00:00.000+01:00,204.65,7%,paid,Material/Waren > Wareneinkauf
+98,9096582c-7568-49af-9a4a-9e44c5341ace,Sas Olinda,02-26-invoice-31561922,2026-02-01T00:00:00.000+01:00,31.2,19%,paid,Zinsen/Gebühren > Nebenkosten des Geldverkehrs
+99,10dfbf1e-7651-4ad7-8845-564904a38e36,Mhb Mobility GmbH,7006,2026-02-01T00:00:00.000+01:00,87.61,19%,paid,Fahrzeug > Kraftstoff/Ladestrom
+100,2c0de986-9ef0-4ee8-a3e8-694b876f9d85,Fastpack GmbH,RE61888,2026-02-01T00:00:00.000+01:00,67.83,19%,paid,Material/Waren > Wareneinkauf
+101,010e4a00-2429-4c09-adea-77bccebb79b9,Sas Olinda,01-26-invoice-30746131,2026-01-31T00:00:00.000+01:00,28.8,0%,paid,Zinsen/Gebühren > Nebenkosten des Geldverkehrs
+102,dab763e2-c2d0-4310-bd9b-edf762a98a9a,Metro Deutschland GmbH,31. 01. 2026/658/0/0/0521/003970,2026-01-31T00:00:00.000+01:00,113.18,7% / 19%,paid,Material/Waren > Wareneinkauf
+103,18e2d573-f57a-44f9-907d-50a42e4949fa,Mrap GmbH,HCM3363153,2026-01-29T00:00:00.000+01:00,20.9,0%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+104,75f7f9f8-c212-4763-8a3d-fcfb7c9f3e21,Shenzhenshi Mengbailing Maoyiyouxiangongsi,PL60000TCGSQ31,2026-01-29T00:00:00.000+01:00,9.24,19%,paid,Material/Waren > Wareneinkauf
+105,eb56715a-4e16-4652-9363-d9356b88a723,Lidl,3351 548170/01,2026-01-29T00:00:00.000+01:00,66.64,7% / 19%,paid,Material/Waren > Wareneinkauf
+106,06bf542d-649a-4d17-8843-cdcb512e0dd7,Metro Deutschland GmbH,INV/2025/00650,2026-01-28T00:00:00.000+01:00,421.89,7%,paid,Material/Waren > Wareneinkauf
+107,171d3e36-01d7-4fca-8bac-b9d160efdde8,"Dipl.-Kim, Frank Rusche,",2026000032,2026-01-27T00:00:00.000+01:00,3474.8,19%,paid,Beratung > Abschluss- und Prüfungskosten
+108,cdae4eb8-07b5-4c71-9548-e9e83e1f741e,Metro Deutschland GmbH,27.01.2026/658/0/0/0521/003208,2026-01-27T00:00:00.000+01:00,229.64,7% / 19%,paid,Material/Waren > Wareneinkauf
+109,40b02e12-ef3c-44ff-9c83-a9b2c84cafe4,Metro Markets GmbH,NLTR4F9BMQ4K33Q9,2026-01-26T00:00:00.000+01:00,74.97,19%,paid,Material/Waren > Material/Waren
+110,d601ba55-ec3f-4b3f-9904-626e08a09a39,Star Tankstelle,4352,2026-01-24T00:00:00.000+01:00,84.18,19%,paid,Fahrzeug > Kraftstoff/Ladestrom
+111,df1f7a11-fa50-4e8e-96fa-3f9fd39fbecd,Wolfmarkt GmbH,1551765,2026-01-24T00:00:00.000+01:00,137.43,7%,paid,Material/Waren > Wareneinkauf
+112,31abcbc4-8fc7-4559-bf30-38af32b08ed5,Metro Deutschland GmbH,24.01. 2026/658/0/0/0521/003050,2026-01-24T00:00:00.000+01:00,182.27,19%,paid,Material/Waren > Wareneinkauf
+113,039f755d-37d9-4b51-83c9-6d01cabc943f,Lidl,8187,2026-01-24T00:00:00.000+01:00,35.07,7% / 19%,paid,Material/Waren > Wareneinkauf
+114,fa7f7b96-ce5c-4aec-a6bb-698709665128,Haufe Service Center GmbH,lx2026010323186,2026-01-23T00:00:00.000+01:00,47.48,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+115,9f0b14b4-2b4a-4eed-8226-037d4255417a,Getränke-Höpfner Voll-Service GmbH,R080076749,2026-01-21T00:00:00.000+01:00,390.42,19%,paid,Material/Waren > Wareneinkauf
+116,d05fe3f1-dc17-4870-81a5-89055df7bc04,Metro Deutschland GmbH,21. 01. 2026/658/0/0/0521/002538,2026-01-21T00:00:00.000+01:00,205.61,7% / 19%,paid,Material/Waren > Wareneinkauf
+117,1bfac367-1c52-4a5b-8f5c-a9c073fbfccf,Aldi,2126,2026-01-20T00:00:00.000+01:00,71.56,19%,paid,Material/Waren > Wareneinkauf
+118,fedc530d-3cca-4486-ae6f-c29556cb9874,Sumup,5100192779,2026-01-20T00:00:00.000+01:00,19.0,0%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+119,e43452f4-0547-4303-b926-72cc41dee325,Ionos Se,100179449275,2026-01-19T00:00:00.000+01:00,5.0,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+120,17af16bc-338b-4307-a43d-8109dc7e00f2,"Aldi Se & Co. Kg.,",0325,2026-01-19T00:00:00.000+01:00,25.44,7%,paid,Material/Waren > Wareneinkauf
+121,19c626e2-6f34-4522-bcee-25efbe545386,Vodafone GmbH,101196769459,2026-01-19T00:00:00.000+01:00,71.28,19%,paid,Telekommunikation > Internet
+122,95a7a1f2-f9b5-4fb6-af32-4693ce0b22c3,Ströer Deutsche Städte Medien GmbH,6906516904,2026-01-18T00:00:00.000+01:00,260.61,19%,paid,Werbung > Anzeigen Print- und Online
+123,c5105df5-d22f-4e9e-8ead-3c7fa12eac24,Metro Deutschland GmbH,17. 01. 2026/658/0/0/0521/002049,2026-01-17T00:00:00.000+01:00,149.94,7% / 19%,paid,Material/Waren > Wareneinkauf
+124,11426b84-9165-4f2d-a97b-ac5961396cc8,Star Tankstelle,483,2026-01-16T00:00:00.000+01:00,86.01,19%,paid,Fahrzeug > Kraftstoff/Ladestrom
+125,01def409-2e59-4b11-9394-815c66e96f80,Lidl sagt Danke,8005,2026-01-15T00:00:00.000+01:00,14.91,7%,paid,Material/Waren > Material/Waren
+126,a319d092-34ab-4267-a657-d4213eb33564,Google Commerce,358840222267348-6,2026-01-15T00:00:00.000+01:00,21.99,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+127,bfb2879e-7023-4874-81c3-a87bebd73216,Metro Deutschland GmbH,15. 01. 2026/658/0/0/0521/001576,2026-01-15T00:00:00.000+01:00,151.97,7% / 19%,paid,Material/Waren > Wareneinkauf
+128,02a1737f-aad1-43c1-907d-e1b3155b9622,Lidl sagt Danke,8005,2026-01-15T00:00:00.000+01:00,14.91,7%,paid,Material/Waren > Wareneinkauf
+129,3c84648f-cf18-44d4-b120-c021c9141cb4,Metro Deutschland GmbH,13. 01. 2026/658/0/0/0521/001278,2026-01-13T00:00:00.000+01:00,212.15,7% / 19%,paid,Material/Waren > Wareneinkauf
+130,d876403d-a99a-43bc-be6e-6eea5df04759,Lidl,2476,2026-01-13T00:00:00.000+01:00,34.6,7% / 19%,paid,Material/Waren > Wareneinkauf
+131,61c0cecd-2317-4eb5-8632-cd97d48b87eb,Freenet Dls GmbH,M26002512219,2026-01-12T00:00:00.000+01:00,14.99,19%,paid,Telekommunikation > Festnetz
+132,29d842fb-be09-4465-a2f5-deab3973928a,Freenet Dls GmbH,M26002832659,2026-01-12T00:00:00.000+01:00,14.99,19%,paid,Telekommunikation > Festnetz
+133,cf3c3644-23db-493f-8619-fa0993f7b779,Lynne GmbH,RE1881551,2026-01-11T00:00:00.000+01:00,19.76,19%,paid,Material/Waren > Wareneinkauf
+134,0085ed4a-69f0-4715-9c44-0d2dbd0696e7,Toom Baumarkt GmbH,5305,2026-01-10T00:00:00.000+01:00,36.99,19%,paid,Sonstige Ausgaben > Wartungskosten für Hard- und Software
+135,c7e569e1-ecbf-4306-bab6-14e01a7f25fc,Wolfmarkt GmbH,1547548,2026-01-10T00:00:00.000+01:00,137.43,7%,paid,Material/Waren > Wareneinkauf
+136,2ec86d42-f947-47ca-a098-5dacdbc09720,Metro Deutschland GmbH,07. 01. 2026/658/0/0/0521/000617,2026-01-07T00:00:00.000+01:00,151.17,7% / 19%,paid,Material/Waren > Wareneinkauf
+137,7cc9fb4a-1ba6-4ce6-ae88-fbfbf259d835,Star Tankstelle,5698,2026-01-06T00:00:00.000+01:00,84.92,19%,paid,Fahrzeug > Kraftstoff/Ladestrom
+138,1499917f-31a3-4801-83a4-fddc547dd52a,Metro Deutschland GmbH,06. 01. 2026/658/0/0/0521/000476,2026-01-06T00:00:00.000+01:00,314.81,7% / 19%,paid,Material/Waren > Wareneinkauf
+139,3f9467da-7013-4307-9e66-009a40307c1c,"Refood Gmbh & Co. Kg,",10747046,2026-01-05T00:00:00.000+01:00,188.14,19%,paid,Raumkosten > Müllgebühren
+140,80097b6e-79da-4970-a520-7e475c8a05fd,Zhuhaishiqianmaidianzishangwuyouxiangongsi,DE600003QF3XBI,2026-01-02T00:00:00.000+01:00,18.94,19%,paid,Material/Waren > Wareneinkauf
+141,66d266eb-1d56-49fe-bf55-9f1a34847291,Lynne GmbH,RE1876388,2026-01-02T00:00:00.000+01:00,64.66,19%,paid,Material/Waren > Wareneinkauf
+142,6d9fcbb2-39e4-43f9-837b-bd00928ecebf,"Amazon Eu S.À R.I., Niederlassung Deutschland",DE6HM9XAEUI,2026-01-02T00:00:00.000+01:00,29.16,19%,paid,Material/Waren > Wareneinkauf
+143,c03e0c76-335f-45f7-b9e9-536391abc981,Amazon Eu S.A.R.L.,PL61JQAEUI,2026-01-02T00:00:00.000+01:00,39.39,0%,paid,Material/Waren > Wareneinkauf
+144,4a9e8e2d-15fa-495b-928e-b3f264499fb4,Metro Deutschland GmbH,02.01.2026/658/0/0/0521/000037,2026-01-02T00:00:00.000+01:00,141.77,7% / 19%,paid,Material/Waren > Wareneinkauf
+145,2d66d699-8e4b-42d0-9547-c19d8fe1b075,Madras Cafe,306-7784145-1193950,2026-01-01T00:00:00.000+01:00,13.98,19%,paid,Material/Waren > Wareneinkauf
+146,20e46f21-f0b2-425b-a341-32e8528cc5bb,Metro Deutschland GmbH,868884909,2025-12-26T00:00:00.000+01:00,271.42,0% / 19%,paid,Gezahlte Vorsteuer > Einfuhrumsatzsteuer
+147,5b835458-d07c-4337-be37-742b2c9dee7f,Haufe Service Center GmbH,lx2025120309239,2025-12-23T00:00:00.000+01:00,47.48,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+148,212b5b42-67a2-44c2-9ade-8cf60db699c4,Metro Markets GmbH,R25-03323643,2025-12-17T00:00:00.000+01:00,175.6,19%,paid,Material/Waren > Wareneinkauf
+149,bddf315d-0b79-41f7-b20d-42001df1a9e9,Srj Foods Nord GmbH,RE2503677,2025-12-16T00:00:00.000+01:00,2745.39,7% / 19%,paid,Material/Waren > Wareneinkauf
+150,203f92e2-2c9e-4e5d-adad-2a33bc00cc31,Gema,7116220628,2025-12-06T00:00:00.000+01:00,86.82,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+151,c2b32d14-6bd8-41d1-add9-224a06632dcf,Srj Foods Nord GmbH,RE2503479,2025-11-25T00:00:00.000+01:00,1909.9,7% / 19%,paid,Material/Waren > Wareneinkauf
+152,780b6321-7191-44d0-8990-4f01bd49ce88,Haufe Service Center GmbH,lx2025110296973,2025-11-23T00:00:00.000+01:00,47.48,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+153,4c66675b-d8ca-41fc-b012-2d92d40a6533,Haufe Service Center GmbH,lx2025100297896,2025-10-23T00:00:00.000+02:00,47.48,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+154,8d63bfcc-d9e2-4f27-b8d4-769e405611c8,Haufe Service Center GmbH,lx2025090288776,2025-09-23T00:00:00.000+02:00,47.48,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+155,e95c996f-52b1-484d-85a5-cf07e0250f3c,Haufe Service Center GmbH,lx2025080285783,2025-08-23T00:00:00.000+02:00,47.48,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+156,d53092ce-16ee-4f4a-b572-b4aba466a9c7,Haufe Service Center GmbH,lx2025070287854,2025-07-23T00:00:00.000+02:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+157,35a8d99c-e301-4304-8575-7db55bdc09ef,"Qonto Sa,",RAT-280,2025-07-17T00:00:00.000+02:00,2521.85,19%,paid,Material/Waren > Wareneinkauf
+158,fedb8aef-d4bd-48df-816b-3bc59c6839ba,Haufe Service Center GmbH,lx2025060281292,2025-06-23T00:00:00.000+02:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+159,307fdba8-8845-4d64-bf9a-e4a77c5336e2,"Qonto Sa,",RAT-5376,2025-06-11T00:00:00.000+02:00,5691.77,19%,paid,Material/Waren > Wareneinkauf
+160,1eda7700-9be0-4cb0-a1d6-3383855945c1,Haufe Service Center GmbH,lx2025050281195,2025-05-23T00:00:00.000+02:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+161,7f525162-92b4-4ed9-b881-c4da55da6fed,"Qonto Sa,",RAT-398,2025-05-09T00:00:00.000+02:00,3583.8,19%,paid,Material/Waren > Wareneinkauf
+162,ce5744a0-57f5-4108-8f77-a83b2e185f50,Haufe Service Center GmbH,lx2025040274733,2025-04-23T00:00:00.000+02:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+163,97f97eb1-997a-482a-a7d7-a02e43169209,Haufe Service Center GmbH,lx2025030280110,2025-03-23T00:00:00.000+01:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+164,20a1da6b-fe0b-4c45-ba1e-e05892395c08,Haufe Service Center GmbH,lx2025020267768,2025-02-23T00:00:00.000+01:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+165,7a07a212-9c35-4a8f-8af3-b049b53c4d92,Aldi,2217,2025-01-26T00:00:00.000+01:00,44.89,7% / 19%,paid,Material/Waren > Wareneinkauf
+166,2d1c7bbc-0da1-4cae-94a1-b51ec888102c,Haufe Service Center GmbH,lx2025010264826,2025-01-23T00:00:00.000+01:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+167,8190e7c8-4d44-4fc9-9a5e-781c9573d43d,Haufe Service Center GmbH,lx2024120246882,2024-12-23T00:00:00.000+01:00,41.53,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+168,1ce7202a-3a7d-41b2-947a-7cbcc3c1cd26,Haufe Service Center GmbH,lx2024110235783,2024-11-23T00:00:00.000+01:00,12.69,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+169,66f04d52-ebab-43e8-854e-a9a0e9be7410,Haufe Service Center GmbH,lx2024110231414,2024-11-23T00:00:00.000+01:00,28.44,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+170,31c968c9-879c-4618-823d-1730d261f317,Haufe Service Center GmbH,lx2024100228950,2024-10-23T00:00:00.000+02:00,14.22,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen
+171,eebfd94a-c1bf-4415-8b78-f074b55e264b,Haufe Service Center GmbH,lx2024080216715,2024-08-22T00:00:00.000+02:00,14.22,19%,paid,Sonstige Ausgaben > Lizenzen und Konzessionen

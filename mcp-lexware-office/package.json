@@ -1,0 +1,12 @@
+{
+  "name": "lexware-automation",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@10.6.3",
+  "scripts": {
+    "build": "pnpm --filter '@lexware/client' build && pnpm --filter '@lexware/db' build && pnpm --filter '@lexware/mcp-server' build",
+    "test": "pnpm --filter '@lexware/mcp-server' test",
+    "dev:worker": "pnpm --filter '@lexware/worker' dev"
+  }
+}

@@ -1,0 +1,113 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lexware
+      POSTGRES_USER: lexware
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lexware -d lexware"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  init-db:
+    image: pgvector/pgvector:pg16
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    command: >
+      bash -c "psql -h postgres -U lexware -d lexware -f /schema.sql
+               && echo '[init-db] Schema applied successfully'"
+    volumes:
+      - ./packages/db/schema.sql:/schema.sql:ro
+    restart: "no"
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      init-db:
+        condition: service_completed_successfully
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://lexware:${POSTGRES_PASSWORD}@postgres:5432/lexware
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      MASTER_ENCRYPTION_KEY: ${MASTER_ENCRYPTION_KEY}
+      POSTMARK_WEBHOOK_TOKEN: ${POSTMARK_WEBHOOK_TOKEN}
+      LEXWARE_WEBHOOK_SECRET: ${LEXWARE_WEBHOOK_SECRET:-}
+      INBOUND_EMAIL_DOMAIN: ${INBOUND_EMAIL_DOMAIN}
+      WORKER_PUBLIC_URL: ${WORKER_PUBLIC_URL}
+      LEXWARE_API_KEY: ${LEXWARE_API_KEY:-}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: apps/dashboard/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      init-db:
+        condition: service_completed_successfully
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://lexware:${POSTGRES_PASSWORD}@postgres:5432/lexware
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MASTER_ENCRYPTION_KEY: ${MASTER_ENCRYPTION_KEY}
+      DASHBOARD_SECRET: ${DASHBOARD_SECRET}
+      LEXWARE_API_KEY: ${LEXWARE_API_KEY:-}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+      INBOUND_EMAIL_DOMAIN: ${INBOUND_EMAIL_DOMAIN}
+      WORKER_BASE_URL: http://worker:3001
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  postgres_data:
+  redis_data:

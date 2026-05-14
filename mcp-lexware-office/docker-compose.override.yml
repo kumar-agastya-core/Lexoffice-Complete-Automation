@@ -1,0 +1,9 @@
+# Local development overrides — exposes DB/Redis ports to host
+# Auto-loaded by docker compose alongside docker-compose.yml
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+  redis:
+    ports:
+      - "6379:6379"

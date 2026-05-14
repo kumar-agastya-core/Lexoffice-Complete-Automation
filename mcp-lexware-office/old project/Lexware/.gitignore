@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+calibration_rules_draft.md
+calibration_rules_draft.csv
+calibrate_*.md
+calibrate_*.csv
+pdf/calibration_cache/

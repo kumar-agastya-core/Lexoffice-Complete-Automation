@@ -1,0 +1,29 @@
+{
+  "name": "@lexware/mcp-server",
+  "description": "MCP server for Lexware Office — complete API coverage for any German business",
+  "version": "0.6.0",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "lexware-office": "./build/index.js"
+  },
+  "files": ["build"],
+  "scripts": {
+    "build": "tsc && shx chmod +x build/*.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@lexware/client": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@vitest/coverage-v8": "^3.2.4",
+    "shx": "^0.3.4",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4"
+  }
+}

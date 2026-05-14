@@ -1,0 +1,12 @@
+node_modules
+.git
+*.log
+.env*
+!.env.example
+coverage
+.next
+apps/dashboard/.next
+apps/mcp-server/build
+apps/mcp-server/src
+src
+old project

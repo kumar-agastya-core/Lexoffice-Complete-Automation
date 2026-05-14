@@ -1,0 +1,30 @@
+{
+  "name": "@lexware/worker",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "tsc",
+    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.95.2",
+    "@lexware/client": "workspace:*",
+    "@lexware/crypto": "workspace:*",
+    "@lexware/db": "workspace:*",
+    "bullmq": "^5.34.8",
+    "express": "^4.21.2",
+    "openai": "^6.37.0",
+    "pdfjs-dist": "^5.7.284",
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.13.10",
+    "@vitest/coverage-v8": "^3.2.4",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4"
+  }
+}
