@@ -24,8 +24,6 @@ interface MessageRow {
   created_at: string;
 }
 
-const AUTH = `Bearer ${process.env.NEXT_PUBLIC_DASHBOARD_SECRET ?? ''}`;
-
 function formatRelative(iso: string): string {
   try {
     const d = new Date(iso);
@@ -95,7 +93,7 @@ export default function AssistentPage() {
 
   const loadConversations = useCallback(async () => {
     try {
-      const res = await fetch('/api/agent/conversations', { headers: { Authorization: AUTH } });
+      const res = await fetch('/api/agent/conversations');
       if (res.ok) {
         const data = await res.json() as { conversations: ConversationRow[] };
         setConversations(data.conversations);
@@ -114,7 +112,6 @@ export default function AssistentPage() {
   async function createConversation() {
     const res = await fetch('/api/agent/conversations', {
       method: 'POST',
-      headers: { Authorization: AUTH },
     });
     if (res.ok) {
       const data = await res.json() as { id: string };
@@ -126,9 +123,7 @@ export default function AssistentPage() {
 
   async function loadConversation(id: string) {
     setActiveId(id);
-    const res = await fetch(`/api/agent/conversations/${id}`, {
-      headers: { Authorization: AUTH },
-    });
+    const res = await fetch(`/api/agent/conversations/${id}`);
     if (res.ok) {
       const data = await res.json() as { conversation: ConversationRow; messages: MessageRow[] };
       setMessages(data.messages);
@@ -138,7 +133,6 @@ export default function AssistentPage() {
   async function deleteConversation(id: string) {
     await fetch(`/api/agent/conversations/${id}`, {
       method: 'DELETE',
-      headers: { Authorization: AUTH },
     });
     if (activeId === id) {
       setActiveId(null);
@@ -155,7 +149,6 @@ export default function AssistentPage() {
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
-        headers: { Authorization: AUTH },
         body: fd,
       });
       if (res.ok) {
@@ -188,7 +181,7 @@ export default function AssistentPage() {
     try {
       const res = await fetch('/api/agent/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: AUTH },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           conversationId: activeId,
           message: userMessage,

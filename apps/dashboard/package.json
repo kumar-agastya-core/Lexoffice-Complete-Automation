@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:env": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "test": "vitest run",

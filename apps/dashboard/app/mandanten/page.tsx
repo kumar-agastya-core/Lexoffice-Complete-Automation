@@ -44,8 +44,6 @@ interface ClientData {
   automationRate: number;
 }
 
-const AUTH = `Bearer ${process.env.NEXT_PUBLIC_DASHBOARD_SECRET ?? ''}`;
-
 function formatDate(iso: string | null): string {
   if (!iso) return 'Noch keiner';
   try {
@@ -71,7 +69,7 @@ export default function MandantenPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/mandanten', { headers: { Authorization: AUTH } });
+      const res = await fetch('/api/mandanten');
       if (res.status === 403) { setForbidden(true); return; }
       if (res.ok) {
         const data = await res.json() as { clients: ClientData[] };
@@ -91,7 +89,7 @@ export default function MandantenPage() {
     try {
       const res = await fetch('/api/mandanten', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: AUTH },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug: slug.trim() }),
       });
       if (res.ok) {
@@ -114,7 +112,6 @@ export default function MandantenPage() {
     try {
       await fetch(`/api/mandanten/${deleteTarget.id}`, {
         method: 'DELETE',
-        headers: { Authorization: AUTH },
       });
       toast.success('Mandant entfernt');
       setDeleteTarget(null);
@@ -129,7 +126,6 @@ export default function MandantenPage() {
     try {
       const res = await fetch(`/api/mandanten/${clientId}/switch`, {
         method: 'POST',
-        headers: { Authorization: AUTH },
       });
       if (res.ok) {
         router.push('/exceptions');

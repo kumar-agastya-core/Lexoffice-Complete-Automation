@@ -165,6 +165,32 @@ async function processDocument(job: Job<DocumentJob>): Promise<object> {
     } catch (err) {
       console.warn('[worker] Usage tracking failed (non-fatal):', err);
     }
+    void (async () => {
+      try {
+        const snippet = extracted.cleanText.slice(0, 200);
+        const dominantCategoryId = fingerprint.classificationExamples
+          .reduce<Record<string, number>>((acc, ex) => {
+            acc[ex.targetCategoryUuid] = (acc[ex.targetCategoryUuid] ?? 0) + 1;
+            return acc;
+          }, {});
+        const categoryId = Object.entries(dominantCategoryId)
+          .sort(([, a], [, b]) => b - a)[0]?.[0];
+        if (categoryId && snippet) {
+          await query(
+            `INSERT INTO classification_examples
+               (tenant_id, text_snippet, category_id, tax_type, voucher_type, source)
+             VALUES (
+               (SELECT id FROM tenant_profiles WHERE lexware_org = $1 OR id::text = $1 LIMIT 1),
+               $2, $3, 'gross', 'purchaseinvoice', 'auto'
+             )
+             ON CONFLICT DO NOTHING`,
+            [tenant.lexwareOrg, snippet, categoryId],
+          );
+        }
+      } catch (err) {
+        console.warn('[tier1] classification_examples reinforcement failed (non-fatal):', err);
+      }
+    })();
     return { processed: payloads.length, tier: 1 };
   }
 

@@ -19,8 +19,6 @@ interface BillingStatus {
   tier3Count: number;
 }
 
-const AUTH = `Bearer ${process.env.NEXT_PUBLIC_DASHBOARD_SECRET ?? ''}`;
-
 const FREE_LIMIT = 50;
 
 const PLAN_DISPLAY: Record<string, { label: string; color: string }> = {
@@ -79,7 +77,7 @@ export default function BillingPage() {
   useEffect(() => {
     void (async () => {
       try {
-        const res = await fetch('/api/billing/status', { headers: { Authorization: AUTH } });
+        const res = await fetch('/api/billing/status');
         if (res.ok) setStatus(await res.json() as BillingStatus);
       } finally {
         setLoading(false);
@@ -92,7 +90,7 @@ export default function BillingPage() {
     try {
       const res = await fetch('/api/billing/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: AUTH },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan }),
       });
       const data = await res.json() as { url?: string; error?: string };
@@ -109,7 +107,6 @@ export default function BillingPage() {
     try {
       const res = await fetch('/api/billing/portal', {
         method: 'POST',
-        headers: { Authorization: AUTH },
       });
       const data = await res.json() as { url?: string };
       if (data.url) window.location.href = data.url;

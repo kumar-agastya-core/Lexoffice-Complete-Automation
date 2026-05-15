@@ -1,13 +1,13 @@
 # Lexware Automation
 
-A headless bookkeeping automation platform for German businesses using Lexware Office. Forward an invoice PDF to your assigned email address — the system extracts the data, classifies it against German tax rules (§13b, §19 UStG, EU VAT), and posts the voucher to Lexware automatically. Documents that need human input appear in a web exception tray with one-click approval.
+A headless bookkeeping automation platform for German businesses using Lexware Office. Forward an invoice PDF to your assigned email address or upload it via the web — the system extracts the data, classifies it against German tax rules (§13b, §19 UStG, EU VAT), and posts the voucher to Lexware automatically. Documents that need human input appear in a web exception tray with one-click approval.
 
 ## Architecture
 
 ```
-  Postmark Inbound Email      SumUp / Hello Cash Upload
-         │                              │
-         └──────────────┬───────────────┘
+  Postmark Inbound Email        Web Upload (PDF / integrations)
+         │                                │
+         └──────────────┬─────────────────┘
                         ▼
                 ┌───────────────┐
                 │    Worker     │  :3001
@@ -15,20 +15,39 @@ A headless bookkeeping automation platform for German businesses using Lexware O
                 │  Express      │  10-step pipeline per document
                 └───────┬───────┘
                         │  jobs / results
-                ┌───────▼───────┐     ┌────────────────┐
-                │     Redis     │◄────│   Dashboard    │  :3000
-                │  (job queue)  │     │  Exception Tray│
-                └───────────────┘     │  Integrations  │
-                        │             └───────┬────────┘
-                        ▼                     │
-             ┌──────────────────────┐         │
-             │  PostgreSQL +        │◄────────┘
-             │  pgvector            │  tenants, exceptions, embeddings
+                ┌───────▼───────┐     ┌────────────────────────┐
+                │     Redis     │◄────│      Dashboard         │  :3000
+                │  (job queue)  │     │  Exception Tray        │
+                └───────────────┘     │  AI Assistant          │
+                        │             │  Vendor Rules          │
+                        ▼             │  Analytics             │
+             ┌──────────────────────┐ │  Agency / Mandanten    │
+             │  PostgreSQL +        │ │  Stripe Billing        │
+             │  pgvector            │◄┘                        │
+             │  (tenants, exceptions│                          │
+             │   embeddings, rules) │                          │
              └──────────┬───────────┘
                         │
                         ▼
                 Lexware Office API
 ```
+
+## Features
+
+| Feature | Description |
+|---|---|
+| **Email ingest** | Forward any invoice PDF — classified and posted within 60 s |
+| **Web upload** | Drag-and-drop PDF upload at `/upload` |
+| **3-tier routing** | Tier 1: fingerprint bypass (0 AI tokens) → Tier 2: LLM classification → Tier 3: human exception review |
+| **Vendor rules** | Learned per-vendor rules; after 3 uses, processing is instant with zero AI cost |
+| **German tax** | Full §13b, §19 UStG, EU intraCommunity, 7%/19% food split support |
+| **Exception tray** | One-click approval for ambiguous documents at `/exceptions` |
+| **AI assistant** | Conversational bookkeeping help with PDF attachment at `/assistent` |
+| **Analytics** | Monthly document counts, tier breakdown, automation rate at `/auswertungen` |
+| **Agency view** | Multi-client management at `/mandanten` (agency plan required) |
+| **Stripe billing** | Subscription management at `/abrechnung` — Starter / Pro / Agency plans |
+| **Supabase auth** | Optional Supabase auth layer; falls back to `DASHBOARD_SECRET` cookie |
+| **Integrations** | SumUp and Hello Cash report upload via the Integrations accordion at `/upload` |
 
 ## Quick Start (6 steps)
 
@@ -89,6 +108,14 @@ Exceptions (if any): **http://localhost:3000/exceptions**
 | `WORKER_PUBLIC_URL` | ✅ | HTTPS URL of worker for webhook callbacks |
 | `NEXT_PUBLIC_APP_URL` | ✅ | Public URL of the dashboard |
 | `LEXWARE_API_KEY` | optional | Single-tenant fallback (skips onboarding) |
+| `NEXT_PUBLIC_SUPABASE_URL` | optional | Supabase project URL (enables Supabase auth) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | optional | Supabase anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | optional | Supabase service role key (server-side auth checks) |
+| `STRIPE_SECRET_KEY` | optional | Stripe secret key (enables billing) |
+| `STRIPE_WEBHOOK_SECRET` | optional | Stripe webhook signing secret |
+| `STRIPE_STARTER_PRICE_ID` | optional | Stripe Price ID for Starter plan |
+| `STRIPE_PRO_PRICE_ID` | optional | Stripe Price ID for Pro plan |
+| `STRIPE_AGENCY_PRICE_ID` | optional | Stripe Price ID for Agency plan |
 
 See `.env.example` for the full list with descriptions.
 
@@ -106,7 +133,7 @@ See `.env.example` for the full list with descriptions.
 
 ## Integrations
 
-Upload monthly reports at **http://localhost:3000/integrations**:
+Access SumUp and Hello Cash upload via the Integrations accordion at `/upload`:
 
 | Integration | What it does |
 |---|---|
@@ -141,6 +168,9 @@ Verify `POSTMARK_WEBHOOK_TOKEN` matches exactly what Postmark sends in the `X-Po
 
 **Lexware API 429 during initial sync**
 Expected. The worker respects the 1.1s rate limit — sync completes automatically in 2–3 minutes for large accounts.
+
+**Billing webhook returns 400**
+Verify `STRIPE_WEBHOOK_SECRET` matches the signing secret shown in the Stripe Dashboard under Webhooks. The webhook endpoint is `POST /api/billing/webhook`.
 
 **Dashboard shows "No exceptions — all documents processed automatically ✓"**
 This is the happy path. Every document was classified and posted without human input.

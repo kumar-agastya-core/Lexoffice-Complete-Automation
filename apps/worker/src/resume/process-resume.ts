@@ -10,7 +10,6 @@ import type { ClarificationContext } from '../classifier/classify.js';
 import { AnthropicClassifier } from '../classifier/anthropic-client.js';
 import { verifyMath } from '../classifier/math-verifier.js';
 import { buildVoucherPayloads } from '../voucher/voucher-builder.js';
-import { updateKnowledge } from '../learning/update-knowledge.js';
 import { getPostingCategories } from '../categories.js';
 import type { TenantProfile } from '../types.js';
 
@@ -163,10 +162,6 @@ export async function processResumeJob(exceptionId: string, tenantId: string): P
   } catch (err) {
     console.warn('[learning] extractAndSaveRule failed (non-fatal):', err);
   }
-
-  // Step 7: Learn
-  void updateKnowledge(extracted, fingerprint, classificationResult, tenant.lexwareOrg)
-    .catch((err) => console.error('[resume] updateKnowledge failed:', err));
 
   console.log(`[resume] Exception ${exceptionId} resolved`);
 }

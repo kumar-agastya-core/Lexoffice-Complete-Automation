@@ -6,7 +6,7 @@ import {
   REQUEST_CLARIFICATION_TOOL,
 } from './tools.js';
 
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = 'claude-sonnet-4-20250514';
 const MAX_TOKENS = 2048;
 const CONFIDENCE_THRESHOLD = 0.75;
 
