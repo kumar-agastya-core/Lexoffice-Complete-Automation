@@ -177,3 +177,80 @@ CREATE TABLE IF NOT EXISTS initial_sync_progress (
 ALTER TABLE exception_queue
   ADD COLUMN IF NOT EXISTS original_file_base64 TEXT,
   ADD COLUMN IF NOT EXISTS original_mime_type   TEXT DEFAULT 'application/pdf';
+
+-- ── Phase 8 — Settings ────────────────────────────────────────────────────────
+
+ALTER TABLE tenant_profiles
+  ADD COLUMN IF NOT EXISTS auto_post_enabled BOOLEAN NOT NULL DEFAULT TRUE;
+
+-- ── Phase 9 — AI Chat Assistant ───────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS conversations (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id   UUID NOT NULL REFERENCES tenant_profiles(id) ON DELETE CASCADE,
+  title       TEXT NOT NULL DEFAULT 'Neue Unterhaltung',
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  conversation_id UUID NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+  tenant_id       UUID NOT NULL REFERENCES tenant_profiles(id) ON DELETE CASCADE,
+  role            TEXT NOT NULL CHECK (role IN ('user', 'assistant')),
+  content         TEXT NOT NULL,
+  tool_calls      JSONB,
+  tool_results    JSONB,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS messages_conversation_idx ON messages (conversation_id, created_at ASC);
+CREATE INDEX IF NOT EXISTS conversations_tenant_idx ON conversations (tenant_id, updated_at DESC);
+
+-- ── Phase 10 — Supabase Auth ──────────────────────────────────────────────────
+
+ALTER TABLE tenant_profiles
+  ADD COLUMN IF NOT EXISTS supabase_user_id UUID;
+
+CREATE UNIQUE INDEX IF NOT EXISTS tenant_profiles_supabase_user_idx
+  ON tenant_profiles (supabase_user_id) WHERE supabase_user_id IS NOT NULL;
+
+-- ── Phase 11 — Agency / multi-client ─────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS agency_clients (
+  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  agency_tenant_id  UUID NOT NULL REFERENCES tenant_profiles(id) ON DELETE CASCADE,
+  client_tenant_id  UUID NOT NULL REFERENCES tenant_profiles(id) ON DELETE CASCADE,
+  added_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (agency_tenant_id, client_tenant_id)
+);
+
+-- ── Phase 12 — Stripe Billing ─────────────────────────────────────────────────
+
+ALTER TABLE tenant_profiles
+  ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT,
+  ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT,
+  ADD COLUMN IF NOT EXISTS plan TEXT NOT NULL DEFAULT 'free'
+    CHECK (plan IN ('free', 'starter', 'pro', 'agency'));
+
+CREATE TABLE IF NOT EXISTS usage_events (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id     UUID NOT NULL REFERENCES tenant_profiles(id) ON DELETE CASCADE,
+  event_type    TEXT NOT NULL,
+  count         INTEGER NOT NULL DEFAULT 1,
+  metadata      JSONB,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS usage_monthly (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id     UUID NOT NULL REFERENCES tenant_profiles(id) ON DELETE CASCADE,
+  year_month    TEXT NOT NULL,
+  docs_processed INTEGER NOT NULL DEFAULT 0,
+  tier1_count   INTEGER NOT NULL DEFAULT 0,
+  tier2_count   INTEGER NOT NULL DEFAULT 0,
+  tier3_count   INTEGER NOT NULL DEFAULT 0,
+  ai_cost_cents INTEGER NOT NULL DEFAULT 0,
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (tenant_id, year_month)
+);

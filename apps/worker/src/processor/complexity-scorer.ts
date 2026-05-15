@@ -20,6 +20,7 @@ interface ScoreInput {
   fingerprint: FingerprintMatch;
   documentType: DocumentType;
   taxTypeHint: TaxTypeHint;
+  approvalThreshold?: number;
 }
 
 export function scoreComplexity({
@@ -27,6 +28,7 @@ export function scoreComplexity({
   fingerprint,
   documentType,
   taxTypeHint,
+  approvalThreshold,
 }: ScoreInput): ComplexityResult {
   const triggers: ComplexityTrigger[] = [];
 
@@ -117,12 +119,12 @@ export function scoreComplexity({
   }
 
   // TRIGGER_7: high_value_document
-  if (doc.totalGrossAmount !== null && doc.totalGrossAmount > 5000) {
+  if (doc.totalGrossAmount !== null && doc.totalGrossAmount > (approvalThreshold ?? 5000)) {
     triggers.push({
       id: 'high_value_document',
       severity: 'warning',
       question:
-        'This document is above €5,000. I will create it as an ' +
+        `This document is above €${(approvalThreshold ?? 5000).toLocaleString()}. I will create it as an ` +
         'unchecked draft for your review before finalising.',
     });
   }

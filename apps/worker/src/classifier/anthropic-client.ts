@@ -12,20 +12,10 @@ const CONFIDENCE_THRESHOLD = 0.75;
 
 const ZU_PRUEFEN = '8d2e71c6-09d5-439a-a295-a9e71661afcd';
 
-type SystemBlock = { type: 'text'; text: string; cache_control: { type: 'ephemeral' } };
+type CachedTextBlock = { type: 'text'; text: string; cache_control: { type: 'ephemeral' } };
+type PlainTextBlock = { type: 'text'; text: string };
 
-export function buildSystemPrompt(tenant: TenantProfile, categories: PostingCategory[]): string {
-  const catJson = JSON.stringify(
-    categories.map((c) => ({ id: c.id, name: c.name, type: c.type, group: c.groupName })),
-    null,
-    2,
-  );
-  return `You are an expert German tax bookkeeping engine for Lexware Office.
-
-OPERATIONAL CONTEXT:
-Business Type: ${tenant.industryOperationalLens}
-Tax Framework: ${tenant.taxFramework}
-VAT Registration: ${tenant.smallBusiness ? 'Kleinunternehmer §19 UStG — all invoices vatfree' : 'Standard VAT registration'}
+const STATIC_SYSTEM_PROMPT = `You are an expert German tax bookkeeping engine for Lexware Office.
 
 GERMAN TAX RULES:
 - Food delivery revenue (Lieferando/Takeaway): 7% VAT (§12 Abs.2 Nr.1 UStG)
@@ -37,28 +27,46 @@ GERMAN TAX RULES:
 - innergemeinschaftlich: taxType=intraCommunitySupply
 - GWG threshold (Geringwertigtes Wirtschaftsgut): €800 net — flag GWG_CANDIDATE
 
-VALID POSTING CATEGORIES (use exact UUIDs):
-${catJson}
-
-FALLBACK CATEGORY: Use "${ZU_PRUEFEN}" (Zu prüfen) when genuinely uncertain.
-
-RULES:
-- Always use exact category UUIDs from the list above
+OUTPUT RULES:
+- Always use exact category UUIDs from the tenant context below
 - Return confidence 0.0–1.0 per line item and overall
 - grossAmount = net + taxAmount for each line item
-- For settlements: first voucher = revenue (salesinvoice), subsequent = fees (purchaseinvoice)`;
+- For settlements: first voucher = revenue (salesinvoice), subsequent = fees (purchaseinvoice)
+- Fallback category UUID when uncertain: "${ZU_PRUEFEN}" (Zu prüfen)`;
+
+export function buildCachedContextBlock(tenant: TenantProfile, categories: PostingCategory[]): CachedTextBlock {
+  const catJson = JSON.stringify(
+    categories.map((c) => ({ id: c.id, name: c.name, type: c.type, group: c.groupName })),
+    null,
+    2,
+  );
+  const text = `TENANT CONTEXT:
+Business Type: ${tenant.industryOperationalLens}
+Tax Framework: ${tenant.taxFramework}
+VAT Registration: ${tenant.smallBusiness ? 'Kleinunternehmer §19 UStG — all invoices vatfree' : 'Standard VAT registration'}
+
+VALID POSTING CATEGORIES (use exact UUIDs):
+${catJson}`;
+
+  return { type: 'text' as const, text, cache_control: { type: 'ephemeral' as const } };
+}
+
+export function buildSystemPrompt(tenant: TenantProfile, categories: PostingCategory[]): string {
+  return `${STATIC_SYSTEM_PROMPT}\n\n${buildCachedContextBlock(tenant, categories).text}`;
 }
 
 export type ClassifyToolName = 'classify_purchase_invoice' | 'classify_settlement';
 
-function buildSystemBlocks(tenant: TenantProfile, categories: PostingCategory[]): SystemBlock[] {
-  return [
-    {
-      type: 'text' as const,
-      text: buildSystemPrompt(tenant, categories),
-      cache_control: { type: 'ephemeral' as const },
-    },
-  ];
+function buildStaticSystemBlock(): CachedTextBlock {
+  return {
+    type: 'text' as const,
+    text: STATIC_SYSTEM_PROMPT,
+    cache_control: { type: 'ephemeral' as const },
+  };
+}
+
+function buildFreshTextBlock(text: string): PlainTextBlock {
+  return { type: 'text' as const, text };
 }
 
 function extractToolResult(
@@ -120,14 +128,30 @@ export class AnthropicClassifier {
   }): Promise<ClassificationResult> {
     const { toolName, tenant, categories, userMessage } = params;
     const tools = getToolsForName(toolName);
-    const response = await this.client.messages.create({
-      model: MODEL,
-      max_tokens: MAX_TOKENS,
-      system: buildSystemBlocks(tenant, categories) as Anthropic.TextBlockParam[],
-      messages: [{ role: 'user', content: userMessage }],
-      tools,
-      tool_choice: { type: 'tool', name: toolName },
-    });
+
+    // Block 1: static tax rules (cached across all calls)
+    // Block 2: tenant-specific context + categories (cached per tenant/category set)
+    // Block 3: fresh document text (no caching — unique per invoice)
+    const userContent: Anthropic.MessageParam['content'] = [
+      buildCachedContextBlock(tenant, categories) as unknown as Anthropic.TextBlockParam,
+      buildFreshTextBlock(userMessage) as Anthropic.TextBlockParam,
+    ];
+
+    const response = await this.client.messages.create(
+      {
+        model: MODEL,
+        max_tokens: MAX_TOKENS,
+        system: [buildStaticSystemBlock()] as unknown as Anthropic.TextBlockParam[],
+        messages: [{ role: 'user', content: userContent }],
+        tools,
+        tool_choice: { type: 'tool', name: toolName },
+      },
+      {
+        headers: {
+          'anthropic-beta': 'prompt-caching-2024-07-31',
+        },
+      },
+    );
     return withPass(extractToolResult(response, toolName), 1);
   }
 
@@ -142,11 +166,13 @@ export class AnthropicClassifier {
     const base64 = pdfBuffer.toString('base64');
     const tools = getToolsForName(toolName);
 
+    // Block 1: static tax rules (cached)
+    // Block 2: tenant context + categories (cached)
+    // Block 3: extracted text hint (fresh)
+    // Block 4: raw PDF document (fresh — unique per invoice)
     const userContent: Anthropic.MessageParam['content'] = [
-      {
-        type: 'text',
-        text: userMessage,
-      },
+      buildCachedContextBlock(tenant, categories) as unknown as Anthropic.TextBlockParam,
+      buildFreshTextBlock(userMessage) as Anthropic.TextBlockParam,
       {
         type: 'document',
         source: {
@@ -161,7 +187,7 @@ export class AnthropicClassifier {
       {
         model: MODEL,
         max_tokens: MAX_TOKENS,
-        system: buildSystemBlocks(tenant, categories) as Anthropic.TextBlockParam[],
+        system: [buildStaticSystemBlock()] as unknown as Anthropic.TextBlockParam[],
         messages: [{ role: 'user', content: userContent }],
         tools,
         tool_choice: { type: 'tool', name: toolName },

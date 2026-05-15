@@ -67,6 +67,11 @@ export interface TenantRow {
   lexoffice_api_key_hash: string | null;
   lexware_voucher_webhook_id: string | null;
   lexware_payment_webhook_id: string | null;
+  auto_post_enabled: boolean;
+  supabase_user_id: string | null;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  plan: 'free' | 'starter' | 'pro' | 'agency';
   created_at: string;
   updated_at: string | null;
 }
@@ -76,6 +81,8 @@ const TENANT_COLS = `
   approval_threshold, setup_complete, setup_step, slug, inbound_email,
   lexoffice_api_key_encrypted, lexoffice_api_key_hash,
   lexware_voucher_webhook_id, lexware_payment_webhook_id,
+  auto_post_enabled, supabase_user_id,
+  stripe_customer_id, stripe_subscription_id, plan,
   created_at, updated_at
 `;
 

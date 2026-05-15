@@ -2,13 +2,30 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { CheckCircle2, Loader2, Copy, UploadCloud, UtensilsCrossed, ShoppingBag, Monitor, HardHat, Building2 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 
-const BUSINESS_TYPES = [
-  { id: 'gastronomy', label: 'Restaurant / Café / Bar', desc: 'Food & beverage, Lieferando, delivery platforms' },
-  { id: 'retail', label: 'Retail / Shop / E-Commerce', desc: 'Product sales, Amazon, eBay, inventory' },
-  { id: 'it_consulting', label: 'IT / Software / Consulting', desc: 'Professional services, software subscriptions' },
-  { id: 'construction', label: 'Construction / Trades / Handwerk', desc: 'Materials, §13b reverse charge, subcontractors' },
-  { id: 'other', label: 'Other Business', desc: 'General business — all standard categories' },
+const BUSINESS_TYPES: Array<{
+  id: string;
+  label: string;
+  desc: string;
+  icon: LucideIcon;
+}> = [
+  { id: 'gastronomy', label: 'Restaurant / Café / Bar', desc: 'Food & beverage, Lieferando, delivery platforms', icon: UtensilsCrossed },
+  { id: 'retail', label: 'Retail / Shop / E-Commerce', desc: 'Product sales, Amazon, eBay, inventory', icon: ShoppingBag },
+  { id: 'it_consulting', label: 'IT / Software / Consulting', desc: 'Professional services, software subscriptions', icon: Monitor },
+  { id: 'construction', label: 'Construction / Trades / Handwerk', desc: 'Materials, §13b reverse charge, subcontractors', icon: HardHat },
+  { id: 'other', label: 'Other Business', desc: 'General business — all standard categories', icon: Building2 },
 ] as const;
 
 interface ValidationResult { valid: boolean; companyName?: string; vatId?: string; error?: string }
@@ -107,25 +124,18 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (step !== 3 || !tenantId) return;
-
-    // Start sync
     void fetch('/api/onboarding/start-sync', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tenantId }),
     });
-
-    const id = setInterval(async () => {
-      await pollProgress();
-    }, 2000);
+    const id = setInterval(async () => { await pollProgress(); }, 2000);
     void pollProgress();
     return () => clearInterval(id);
   }, [step, tenantId, pollProgress]);
 
   useEffect(() => {
-    if (progress?.status === 'complete' && !webhooksDone) {
-      void setupWebhooks();
-    }
+    if (progress?.status === 'complete' && !webhooksDone) void setupWebhooks();
   }, [progress, webhooksDone, setupWebhooks]);
 
   useEffect(() => {
@@ -134,184 +144,231 @@ export default function OnboardingPage() {
     }
   }, [progress, webhooksDone]);
 
+  const contacts = progress?.contacts_synced ?? 0;
+  const categories = progress?.categories_cached ?? 0;
+  const vouchers = progress?.vouchers_learned ?? 0;
+  const syncPct = Math.min(100, ((contacts + categories + vouchers) / 300) * 100);
+
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="mx-auto max-w-lg">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900">Set up your account</h1>
-        <p className="mt-2 text-gray-500">Connect Lexware → 4 minutes to fully automated bookkeeping</p>
-      </div>
-
+    <div className="mx-auto max-w-lg py-8">
       {/* Step indicator */}
-      <div className="mb-8 flex justify-center gap-2">
-        {([1, 2, 3, 4] as Step[]).map((s) => (
-          <div
-            key={s}
-            className={`h-2 w-8 rounded-full transition-colors ${s <= step ? 'bg-blue-600' : 'bg-gray-200'}`}
-          />
-        ))}
-      </div>
+      <Progress value={(step / 4) * 100} className="mb-3" />
+      <p className="mb-8 text-right text-sm text-muted-foreground">
+        Schritt {step} von 4
+      </p>
 
       {/* ── STEP 1 ── */}
       {step === 1 && (
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-1 text-xl font-semibold">Connect your Lexware account</h2>
-          <p className="mb-5 text-sm text-gray-500">
-            You can find your API key at{' '}
-            <a href="https://app.lexware.de/addons/public-api" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
-              app.lexware.de/addons/public-api
-            </a>
-          </p>
-
-          {validation?.valid ? (
-            <div className="mb-5 flex items-start gap-2 rounded-lg bg-green-50 p-3 text-sm text-green-800">
-              <span>✓</span>
-              <span>Connected: <strong>{validation.companyName}</strong>{validation.vatId ? ` (${validation.vatId})` : ''}</span>
-            </div>
-          ) : (
-            <form onSubmit={handleValidate} className="space-y-4">
-              <input
+        <Card>
+          <CardHeader>
+            <CardTitle>Lexware API-Schlüssel</CardTitle>
+            <CardDescription>Verbinden Sie Ihr Lexware Office Konto</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="apikey">API-Schlüssel</Label>
+              <Input
+                id="apikey"
                 type="password"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 autoComplete="off"
+                className="font-mono"
               />
-              {error && <p className="text-sm text-red-600">{error}</p>}
-              <button
-                type="submit"
+            </div>
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            {validation?.valid && (
+              <Alert>
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <AlertDescription>
+                  Verbunden mit: <strong>{validation.companyName}</strong>
+                  {validation.vatId ? ` (${validation.vatId})` : ''}
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+          <CardFooter className="flex gap-3">
+            {!validation?.valid ? (
+              <Button
+                onClick={(e) => void handleValidate(e as unknown as React.FormEvent)}
                 disabled={validating || !apiKey.trim()}
-                className="w-full rounded-md bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                className="w-full"
               >
-                {validating ? 'Validating…' : 'Validate Key'}
-              </button>
-            </form>
-          )}
-
-          {validation?.valid && (
-            <button
-              onClick={() => setStep(2)}
-              className="mt-3 w-full rounded-md bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              Continue →
-            </button>
-          )}
-        </div>
+                {validating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                {validating ? 'Wird geprüft…' : 'Weiter →'}
+              </Button>
+            ) : (
+              <Button onClick={() => setStep(2)} className="w-full">
+                Weiter →
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
       )}
 
       {/* ── STEP 2 ── */}
       {step === 2 && (
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-5 text-xl font-semibold">What type of business do you run?</h2>
-          <form onSubmit={handleCreate} className="space-y-3">
-            {BUSINESS_TYPES.map((bt) => (
-              <label
-                key={bt.id}
-                className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
-                  businessTypeId === bt.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="businessType"
-                  value={bt.id}
-                  checked={businessTypeId === bt.id}
-                  onChange={() => setBusinessTypeId(bt.id)}
-                  className="mt-0.5"
-                />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{bt.label}</p>
-                  <p className="text-xs text-gray-500">{bt.desc}</p>
-                </div>
-              </label>
-            ))}
-
-            {error && <p className="text-sm text-red-600">{error}</p>}
-            <button
-              type="submit"
+        <Card>
+          <CardHeader>
+            <CardTitle>Unternehmenstyp</CardTitle>
+            <CardDescription>Damit wir die richtigen Buchungskategorien verwenden</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RadioGroup value={businessTypeId} onValueChange={setBusinessTypeId} className="space-y-2">
+              {BUSINESS_TYPES.map((bt) => {
+                const Icon = bt.icon;
+                const selected = businessTypeId === bt.id;
+                return (
+                  <label
+                    key={bt.id}
+                    className={cn(
+                      'flex cursor-pointer items-center gap-4 rounded-lg border p-3 transition-colors hover:bg-accent/50',
+                      selected && 'ring-2 ring-primary',
+                    )}
+                  >
+                    <RadioGroupItem value={bt.id} className="sr-only" />
+                    <Icon className={cn('h-5 w-5 shrink-0', selected ? 'text-primary' : 'text-muted-foreground')} />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{bt.label}</p>
+                      <p className="text-xs text-muted-foreground">{bt.desc}</p>
+                    </div>
+                  </label>
+                );
+              })}
+            </RadioGroup>
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+          <CardFooter className="flex gap-3">
+            <Button variant="outline" onClick={() => setStep(1)}>Zurück</Button>
+            <Button
+              onClick={(e) => void handleCreate(e as unknown as React.FormEvent)}
               disabled={creating || !businessTypeId}
-              className="mt-2 w-full rounded-md bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              className="flex-1"
             >
-              {creating ? 'Setting up…' : 'Continue →'}
-            </button>
-          </form>
-        </div>
+              {creating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {creating ? 'Wird eingerichtet…' : 'Konto erstellen'}
+            </Button>
+          </CardFooter>
+        </Card>
       )}
 
       {/* ── STEP 3 ── */}
       {step === 3 && (
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-1 text-xl font-semibold">Syncing your Lexware account</h2>
-          <p className="mb-6 text-sm text-gray-500">This takes about 30 seconds…</p>
-
-          <div className="space-y-3">
-            {[
-              { label: 'Importing contacts', done: (progress?.contacts_synced ?? 0) > 0, count: progress?.contacts_synced, unit: 'contacts' },
-              { label: 'Loading posting categories', done: (progress?.categories_cached ?? 0) > 0, count: progress?.categories_cached, unit: 'categories' },
-              { label: 'Learning from invoice history', done: progress?.status === 'complete', count: progress?.vouchers_learned, unit: 'invoices' },
-              { label: 'Setting up webhooks', done: webhooksDone, count: null, unit: '' },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-3 text-sm">
-                <span className={`text-lg ${item.done ? 'text-green-500' : 'text-gray-300 animate-pulse'}`}>
-                  {item.done ? '✓' : '○'}
-                </span>
-                <span className={item.done ? 'text-gray-900' : 'text-gray-400'}>
-                  {item.done && item.count != null
-                    ? `${item.count} ${item.unit} ${item.unit === '' ? 'active' : 'imported'}`
-                    : item.done ? 'Webhooks active' : item.label + '…'}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {progress?.status === 'failed' && (
-            <p className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-              Sync error: {progress.error_message}
-            </p>
-          )}
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Initialisierung</CardTitle>
+            <CardDescription>Wir synchronisieren Ihre Lexware-Daten</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <Progress value={syncPct} className="h-2" />
+            <div className="space-y-3">
+              {[
+                { label: 'Kontakte', value: contacts, done: contacts > 0 },
+                { label: 'Buchungskategorien', value: categories, done: categories > 0 },
+                { label: 'Belege gelernt', value: vouchers, done: vouchers > 0 },
+                { label: 'Webhooks', value: null, done: webhooksDone },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    {item.done ? (
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    ) : (
+                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                    )}
+                    <span className={item.done ? 'text-foreground' : 'text-muted-foreground'}>
+                      {item.label}
+                    </span>
+                  </div>
+                  {item.done ? (
+                    item.value != null ? (
+                      <span className="font-medium">{item.value}</span>
+                    ) : (
+                      <span className="text-green-600 font-medium">Aktiv</span>
+                    )
+                  ) : (
+                    <Skeleton className="h-4 w-16" />
+                  )}
+                </div>
+              ))}
+            </div>
+            {progress?.status === 'failed' && (
+              <Alert variant="destructive">
+                <AlertDescription>Sync-Fehler: {progress.error_message}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
       )}
 
       {/* ── STEP 4 ── */}
       {step === 4 && (
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm text-center">
-          <div className="mb-4 text-5xl">🎉</div>
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">You're all set</h2>
-
-          <div className="my-6 rounded-lg bg-blue-50 p-4">
-            <p className="mb-2 text-sm font-medium text-blue-800">📧 Your invoice email address:</p>
-            <div className="flex items-center justify-center gap-2">
-              <code className="rounded bg-white px-3 py-1.5 text-sm font-mono text-blue-900 border border-blue-200">
-                {inboundEmail}
-              </code>
-              <button
-                onClick={() => void navigator.clipboard.writeText(inboundEmail)}
-                className="rounded-md border border-blue-300 px-2 py-1 text-xs text-blue-700 hover:bg-blue-100"
-              >
-                Copy
-              </button>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="h-8 w-8 text-green-600" />
+              <div>
+                <CardTitle>Alles bereit!</CardTitle>
+                <CardDescription>Ihr Konto ist eingerichtet</CardDescription>
+              </div>
             </div>
-          </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Email section */}
+            <div className="space-y-2">
+              <Label>Ihre Eingangs-E-Mail-Adresse</Label>
+              <div className="flex gap-2">
+                <Input
+                  readOnly
+                  value={inboundEmail || 'Wird zugewiesen…'}
+                  className="font-mono text-sm"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => {
+                    if (inboundEmail) {
+                      void navigator.clipboard.writeText(inboundEmail);
+                      toast.success('Kopiert!');
+                    }
+                  }}
+                  disabled={!inboundEmail}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Leiten Sie Rechnungen als PDF an diese Adresse weiter
+              </p>
+            </div>
 
-          <ul className="mb-6 space-y-2 text-left text-sm text-gray-600">
-            <li className="flex items-start gap-2"><span>•</span><span>Forward any invoice PDF to this address</span></li>
-            <li className="flex items-start gap-2"><span>•</span><span>Unclear documents appear in your Exception Tray</span></li>
-            <li className="flex items-start gap-2"><span>•</span><span>Everything else is posted automatically</span></li>
-          </ul>
-
-          <button
-            onClick={() => router.push('/exceptions')}
-            className="w-full rounded-md bg-green-600 py-2.5 text-sm font-semibold text-white hover:bg-green-700"
-          >
-            Open Exception Tray →
-          </button>
-
-          <p className="mt-4 rounded-md bg-gray-50 p-3 text-xs text-gray-500">
-            Your Lexware account is connected. Webhooks are active — payment updates will appear in real-time.
-          </p>
-        </div>
+            {/* Upload shortcut */}
+            <div className="flex flex-col items-center gap-2 rounded-lg border-2 border-dashed border-muted-foreground/30 p-6">
+              <UploadCloud className="h-8 w-8 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                Oder laden Sie jetzt einen Beleg hoch
+              </p>
+              <Button variant="outline" size="sm" onClick={() => router.push('/upload')}>
+                Zur Upload-Seite
+              </Button>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full" onClick={() => router.push('/exceptions')}>
+              Zum Dashboard
+            </Button>
+          </CardFooter>
+        </Card>
       )}
     </div>
   );

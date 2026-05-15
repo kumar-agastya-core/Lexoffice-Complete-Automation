@@ -18,7 +18,7 @@ async function findUniqueSlug(base: string): Promise<string> {
     `SELECT slug FROM tenant_profiles WHERE slug LIKE $1`,
     [`${base}%`],
   );
-  const taken = new Set(res.rows.map((r) => r.slug));
+  const taken = new Set(res.rows.map((r: { slug: string }) => r.slug));
   if (!taken.has(base)) return base;
   for (let i = 2; i <= 99; i++) {
     const candidate = `${base.slice(0, 17)}-${i}`;

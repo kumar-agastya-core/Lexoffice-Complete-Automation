@@ -149,6 +149,21 @@ export async function processResumeJob(exceptionId: string, tenantId: string): P
     [exceptionId],
   );
 
+  // ── Learning loop ───────────────────────────────────────────────────────────
+  const clarificationAnswer = answeredSessions[0]?.answer ?? '';
+  try {
+    const { extractAndSaveRule } = await import('../learning/extract-and-save-rule.js');
+    await extractAndSaveRule({
+      userAnswer: clarificationAnswer,
+      classificationResult,
+      extracted,
+      tenantId: tenantId,
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? '',
+    });
+  } catch (err) {
+    console.warn('[learning] extractAndSaveRule failed (non-fatal):', err);
+  }
+
   // Step 7: Learn
   void updateKnowledge(extracted, fingerprint, classificationResult, tenant.lexwareOrg)
     .catch((err) => console.error('[resume] updateKnowledge failed:', err));

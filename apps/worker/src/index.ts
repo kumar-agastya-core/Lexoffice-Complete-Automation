@@ -7,7 +7,7 @@ import {
   resumeQueue,
 } from './queue.js';
 import type { DocumentJob } from './queue.js';
-import { query, closePool } from '@lexware/db';
+import { query, closePool, getTenantBySlug } from '@lexware/db';
 import { verifyHmacSignature } from '@lexware/crypto';
 import { extractPdfText } from './processor/pdf-extractor.js';
 import { parseSumUpReport } from './integrations/sumup-parser.js';
@@ -55,6 +55,8 @@ interface PostmarkInboundPayload {
   From?: string;
   Subject?: string;
   Attachments?: PostmarkAttachment[];
+  OriginalRecipient?: string;
+  ToFull?: Array<{ Email: string; Name: string }>;
   [key: string]: unknown;
 }
 
@@ -77,7 +79,14 @@ app.post('/webhook/inbound-email', async (req, res) => {
     return;
   }
 
-  const tenantId = (req.headers['x-tenant-id'] as string | undefined) ?? 'default';
+  const originalRecipient = (payload.OriginalRecipient ?? payload.ToFull?.[0]?.Email ?? '') as string;
+  const slug = originalRecipient.split('@')[0]?.toLowerCase() ?? '';
+  const tenantRow = slug ? await getTenantBySlug(slug) : null;
+  if (!tenantRow) {
+    console.warn(`[webhook] No tenant found for slug "${slug}" from ${originalRecipient}`);
+    return;
+  }
+  const tenantId = tenantRow.id;
 
   for (const pdf of pdfs) {
     const fileBuffer = Buffer.from(pdf.Content, 'base64');
@@ -202,6 +211,31 @@ app.post('/integrations/hellocash', express.raw({ type: ['application/pdf', 'tex
     console.error('[integrations/hellocash]', err);
     res.status(500).json({ error: 'Processing failed' });
   }
+});
+
+// ── Universal document upload ──────────────────────────────────────────────────
+
+app.post('/document/upload', express.raw({ type: 'application/pdf', limit: '20mb' }), async (req, res) => {
+  const tenantId = req.headers['x-tenant-id'] as string | undefined;
+  if (!tenantId) {
+    res.status(400).json({ error: 'x-tenant-id header required' });
+    return;
+  }
+  if (!Buffer.isBuffer(req.body) || req.body.length === 0) {
+    res.status(400).json({ error: 'PDF body required' });
+    return;
+  }
+  const job: DocumentJob = {
+    tenantId,
+    fileBuffer: req.body,
+    mimeType: 'application/pdf',
+    source: 'upload',
+    receivedAt: new Date().toISOString(),
+  };
+  const jobId = `${tenantId}:upload:${Date.now()}`;
+  await documentQueue.add(jobId, job, { jobId });
+  console.log(`[upload] Queued document for tenant ${tenantId}, size ${req.body.length} bytes`);
+  res.status(200).json({ ok: true, jobId });
 });
 
 // ── Health ─────────────────────────────────────────────────────────────────────

@@ -1,20 +1,27 @@
 import type { ReactElement } from 'react';
 import { notFound } from 'next/navigation';
 import { getException } from '@/app/lib/db';
-import StatusBadge from '@/components/StatusBadge';
-import ClarificationCard from '@/components/ClarificationCard';
-import ExecutionPlanPreview from '@/components/ExecutionPlanPreview';
-import ApproveButton from '@/components/ApproveButton';
-import BankReconciliationPanel from '@/components/BankReconciliationPanel';
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ExternalLink } from 'lucide-react';
+import { ExceptionDetailClient } from './ExceptionDetailClient';
 
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
-}
+type ExceptionStatus = 'pending' | 'awaiting_approval' | 'resolved' | 'dismissed';
+
+const STATUS_LABELS: Record<ExceptionStatus, string> = {
+  pending: 'Klärung nötig',
+  awaiting_approval: 'Genehmigung',
+  resolved: 'Erledigt',
+  dismissed: 'Abgewiesen',
+};
+
+const STATUS_VARIANTS: Record<ExceptionStatus, 'destructive' | 'secondary' | 'outline'> = {
+  pending: 'destructive',
+  awaiting_approval: 'secondary',
+  resolved: 'outline',
+  dismissed: 'outline',
+};
 
 export default async function ExceptionDetailPage({
   params,
@@ -25,83 +32,77 @@ export default async function ExceptionDetailPage({
   const exception = await getException(id).catch(() => null);
   if (!exception) notFound();
 
-  const payload = exception.payload;
-  const voucherId = payload.lexwareDraftVoucherId;
-  const resolvedVoucherId = (payload as any).resolvedVoucherId as string | undefined;
+  const payload = exception.payload as unknown as Record<string, unknown>;
+  const plan = (payload.executionPlan ?? {}) as Record<string, unknown>;
+  const pdfBase64 = payload.originalFileBase64 as string | undefined;
+  const status = exception.status as ExceptionStatus;
 
   return (
-    <div className="space-y-6">
-      {/* Back link */}
-      <a href="/exceptions" className="text-sm text-blue-600 hover:underline">
-        ← Back to Exception Tray
-      </a>
-
-      {/* Header */}
-      <div className="rounded-lg border border-gray-200 bg-white p-5">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">
-              {payload.triggerReasons.join(', ') || 'Unknown document'}
-            </h1>
-            <p className="mt-1 text-sm text-gray-500">
-              Source: {payload.source} · Received: {relativeTime(payload.receivedAt)} ·
-              Created: {relativeTime(exception.created_at)}
-            </p>
-          </div>
-          <StatusBadge status={exception.status} />
-        </div>
-
-        {voucherId && payload.lexwareDeeplink && (
-          <a
-            href={payload.lexwareDeeplink}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            View Draft in Lexware →
-          </a>
-        )}
+    <div className="space-y-4">
+      <div>
+        <a href="/exceptions" className="text-sm text-muted-foreground hover:underline">
+          ← Zurück zur Übersicht
+        </a>
       </div>
 
-      {/* Clarification questions */}
-      {exception.sessions.length > 0 && (
-        <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Clarification Needed</h2>
-          <div className="space-y-3">
-            {exception.sessions.map((session) => (
-              <ClarificationCard
-                key={session.id}
-                exceptionId={id}
-                session={session}
-                referenceDocs={
-                  (session.context_json?.referenceDocs ?? []) as string[]
-                }
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      <div className="grid gap-6 lg:grid-cols-5">
+        {/* LEFT COLUMN — PDF viewer (client component) */}
+        <div className="lg:col-span-2">
+          <ExceptionDetailClient.PDFViewer pdfBase64={pdfBase64} />
+        </div>
 
-      {/* Execution plan */}
-      {payload.executionPlan != null && (
-        <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Execution Plan</h2>
-          <ExecutionPlanPreview plan={payload.executionPlan} />
-        </section>
-      )}
+        {/* RIGHT COLUMN */}
+        <div className="flex flex-col gap-4 lg:col-span-3">
+          {/* Header card */}
+          <Card>
+            <CardHeader>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <CardTitle className="text-lg">
+                    {(plan.extractedVendorName as string | undefined) ??
+                      exception.payload.triggerReasons?.[0] ??
+                      'Unbekanntes Dokument'}
+                  </CardTitle>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                    {plan.extractedAmount != null && (
+                      <span className="text-base font-semibold text-foreground">
+                        €{(plan.extractedAmount as number).toFixed(2)}
+                      </span>
+                    )}
+                    {plan.extractedDate != null && (
+                      <span>{String(plan.extractedDate)}</span>
+                    )}
+                    <Badge variant={payload.source === 'email' ? 'secondary' : 'outline'}>
+                      {payload.source === 'email' ? 'E-Mail' : 'Upload'}
+                    </Badge>
+                    <Badge variant={STATUS_VARIANTS[status]}>
+                      {STATUS_LABELS[status]}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </CardHeader>
+            {payload.lexwareDeeplink != null && (
+              <CardContent className="pt-0">
+                <Button variant="outline" size="sm" asChild>
+                  <a href={String(payload.lexwareDeeplink)} target="_blank" rel="noreferrer">
+                    <ExternalLink className="mr-2 h-3.5 w-3.5" />
+                    In Lexware öffnen
+                  </a>
+                </Button>
+              </CardContent>
+            )}
+          </Card>
 
-      {/* Approve button */}
-      {exception.status === 'awaiting_approval' && (
-        <ApproveButton exceptionId={id} plan={payload.executionPlan} />
-      )}
-
-      {/* Bank reconciliation */}
-      {(resolvedVoucherId || voucherId) && exception.status === 'resolved' && (
-        <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Bank Reconciliation</h2>
-          <BankReconciliationPanel voucherId={resolvedVoucherId ?? voucherId!} />
-        </section>
-      )}
+          {/* Chat + approve (client component) */}
+          <ExceptionDetailClient.ChatAndApprove
+            exceptionId={id}
+            sessions={exception.sessions}
+            status={status}
+            plan={plan}
+          />
+        </div>
+      </div>
     </div>
   );
 }

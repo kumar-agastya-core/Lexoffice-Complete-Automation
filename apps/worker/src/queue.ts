@@ -115,8 +115,61 @@ async function processDocument(job: Job<DocumentJob>): Promise<object> {
     `vendor=${fingerprint.vendorName ?? 'unknown'} examples=${fingerprint.classificationExamples.length}`,
   );
 
+  // ── Tier 1: fingerprint bypass ──────────────────────────────────────────────
+  if (
+    fingerprint.matched &&
+    fingerprint.classificationExamples.length >= 3 &&
+    fingerprint.documentTypeRule !== null
+  ) {
+    console.log(`[worker] Job ${job.id} — TIER 1 hit for vendor "${fingerprint.vendorName}", skipping LLM`);
+    const { buildVoucherFromFingerprint } = await import('./voucher/fingerprint-voucher.js');
+    const { payloads } = buildVoucherFromFingerprint(fingerprint, extracted);
+
+    for (const payload of payloads) {
+      const voucherResult = await lexwareClient.writeRequest<{ id: string }>(
+        '/v1/vouchers', 'POST', payload,
+      );
+      if (voucherResult?.ok) {
+        const voucherId = voucherResult.data.id;
+        const fileBuffer = Buffer.isBuffer(job.data.fileBuffer)
+          ? job.data.fileBuffer
+          : Buffer.from(job.data.fileBuffer);
+        await lexwareClient.fileUpload(`/v1/vouchers/${voucherId}/files`, {
+          buffer: fileBuffer,
+          fileName: `doc-tier1-${Date.now()}.pdf`,
+          mimeType: job.data.mimeType,
+        });
+        await query(
+          `UPDATE vendor_fingerprints SET usage_count = usage_count + 1, last_used_at = NOW()
+           WHERE id = $1`,
+          [fingerprint.fingerprintId],
+        );
+        console.log(`[worker] Job ${job.id} — TIER 1 voucher posted: ${voucherId}`);
+      }
+    }
+    try {
+      await query(
+        `INSERT INTO usage_events (tenant_id, event_type, count, metadata)
+         VALUES ($1, 'doc_processed', 1, $2::jsonb)`,
+        [tenant.id, JSON.stringify({ tier: 1, voucherCount: payloads.length })],
+      );
+      await query(
+        `INSERT INTO usage_monthly (tenant_id, year_month, docs_processed, tier1_count)
+         VALUES ($1, TO_CHAR(NOW(), 'YYYY-MM'), 1, 1)
+         ON CONFLICT (tenant_id, year_month) DO UPDATE SET
+           docs_processed = usage_monthly.docs_processed + 1,
+           tier1_count = usage_monthly.tier1_count + 1,
+           updated_at = NOW()`,
+        [tenant.id],
+      );
+    } catch (err) {
+      console.warn('[worker] Usage tracking failed (non-fatal):', err);
+    }
+    return { processed: payloads.length, tier: 1 };
+  }
+
   // Step 5: Score complexity
-  const complexity = scoreComplexity({ doc: extracted, fingerprint, documentType, taxTypeHint });
+  const complexity = scoreComplexity({ doc: extracted, fingerprint, documentType, taxTypeHint, approvalThreshold: tenant.approvalThreshold });
   console.log(
     `[worker] Job ${job.id} complexity: score=${complexity.score} ` +
     `triggers=[${complexity.triggers.map((t) => t.id).join(', ')}]`,
@@ -231,6 +284,28 @@ async function processDocument(job: Job<DocumentJob>): Promise<object> {
   if (results.some((r) => r.status === 'open')) {
     void updateKnowledge(extracted, fingerprint, classificationResult, tenant.lexwareOrg)
       .catch((err) => console.error('[worker] updateKnowledge failed:', err));
+  }
+
+  // Step 11: Usage tracking (Tier 2)
+  if (results.length > 0) {
+    try {
+      await query(
+        `INSERT INTO usage_events (tenant_id, event_type, count, metadata)
+         VALUES ($1, 'doc_processed', 1, $2::jsonb)`,
+        [tenant.id, JSON.stringify({ tier: 2, voucherCount: results.length })],
+      );
+      await query(
+        `INSERT INTO usage_monthly (tenant_id, year_month, docs_processed, tier2_count)
+         VALUES ($1, TO_CHAR(NOW(), 'YYYY-MM'), 1, 1)
+         ON CONFLICT (tenant_id, year_month) DO UPDATE SET
+           docs_processed = usage_monthly.docs_processed + 1,
+           tier2_count = usage_monthly.tier2_count + 1,
+           updated_at = NOW()`,
+        [tenant.id],
+      );
+    } catch (err) {
+      console.warn('[worker] Usage tracking failed (non-fatal):', err);
+    }
   }
 
   return { processed: results.length, vouchers: results };
