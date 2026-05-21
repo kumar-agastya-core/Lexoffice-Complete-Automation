@@ -4,12 +4,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/db.js",
-      "types": "./dist/db.d.ts"
+      "import": "./src/db.ts",
+      "default": "./src/db.ts"
     },
     "./schema.sql": "./schema.sql"
   },
-  "files": ["dist", "schema.sql"],
+  "files": ["src", "schema.sql"],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
