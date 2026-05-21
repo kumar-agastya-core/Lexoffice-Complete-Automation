@@ -158,6 +158,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+!apps/dashboard/lib/
 parts/
 sdist/
 var/
