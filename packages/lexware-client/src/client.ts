@@ -1,5 +1,5 @@
-import { RateLimiter } from './rate-limiter.js';
-import type { WriteResult, LexwareLogger } from './types.js';
+import { RateLimiter } from './rate-limiter';
+import type { WriteResult, LexwareLogger } from './types';
 
 const LEXWARE_API_BASE = 'https://api.lexware.io';
 const USER_AGENT = 'mcp-lexware-office/0.6.0';

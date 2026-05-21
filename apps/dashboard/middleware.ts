@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
   // ── Supabase auth (when configured) ──────────────────────────────────────
   if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    const { updateSession } = await import('./app/lib/supabase/middleware.js');
+    const { updateSession } = await import('./app/lib/supabase/middleware');
     const { response, user } = await updateSession(request);
     if (!user) {
       const loginUrl = request.nextUrl.clone();
