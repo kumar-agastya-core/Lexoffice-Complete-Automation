@@ -12,12 +12,18 @@ export interface ClarificationSession {
   answered_at: string | null;
 }
 
+export interface ExceptionPayload {
+  lexwareDraftVoucherId?: string;
+  resolvedVoucherId?: string;
+  [key: string]: unknown;
+}
+
 export interface ExceptionRow {
   id: string;
   tenant_id: string;
   job_id: string | null;
   reason: string;
-  payload: Record<string, unknown>;
+  payload: ExceptionPayload;
   reference_docs: Array<{ filename: string; base64: string; uploadedAt: string; size: number }>;
   original_file_base64: string | null;
   original_mime_type: string;
