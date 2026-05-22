@@ -1,4 +1,5 @@
 import { getExceptions } from '@/app/lib/db';
+import type { ExceptionRow } from '@/app/lib/db';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ExceptionDataTable } from '@/components/exceptions/ExceptionDataTable';
@@ -8,44 +9,41 @@ export default async function ExceptionListPage({
 }: {
   searchParams: Promise<{ status?: string; page?: string }>;
 }) {
-  const sp = await searchParams;
-  const status = (sp.status ?? 'all') as 'pending' | 'resolved' | 'all';
-  const page = Math.max(1, parseInt(sp.page ?? '1', 10));
-  const pageSize = 100;
+  const { status = 'open', page: pageStr = '1' } = await searchParams;
+  const page = Math.max(1, Number(pageStr) || 1);
+  const pageSize = 20;
 
-  const tenantId = process.env.LEXWARE_TENANT_ID ?? 'default';
-  const { rows, total } = await getExceptions(tenantId, 'all', page, pageSize).catch(() => ({
+  const { rows, total } = await getExceptions('default', status, page, pageSize).catch(() => ({
     rows: [],
     total: 0,
   }));
 
+  const totalPages = Math.ceil(total / pageSize);
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Ausnahmen</h1>
-        {total > 0 && (
-          <Badge variant="secondary">{total}</Badge>
-        )}
+        <Badge variant="secondary">{total} gesamt</Badge>
       </div>
 
-      <Tabs defaultValue={status}>
+      <Tabs value={status}>
         <TabsList>
-          <TabsTrigger value="all" asChild>
-            <a href="/exceptions?status=all">Alle</a>
-          </TabsTrigger>
-          <TabsTrigger value="pending" asChild>
-            <a href="/exceptions?status=pending">Klärung nötig</a>
-          </TabsTrigger>
-          <TabsTrigger value="awaiting_approval" asChild>
-            <a href="/exceptions?status=awaiting_approval">Genehmigung</a>
+          <TabsTrigger value="open" asChild>
+            <a href="/exceptions?status=open">Offen</a>
           </TabsTrigger>
           <TabsTrigger value="resolved" asChild>
             <a href="/exceptions?status=resolved">Erledigt</a>
           </TabsTrigger>
+          <TabsTrigger value="all" asChild>
+            <a href="/exceptions?status=all">Alle</a>
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
-      <ExceptionDataTable data={rows} />
+      <div>
+        <ExceptionDataTable data={rows as unknown as ExceptionRow[]} />
+      </div>
     </div>
   );
 }
