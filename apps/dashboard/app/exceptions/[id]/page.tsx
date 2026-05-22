@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+äö←üÜ—öimport type { ReactElement } from 'react';
 import { notFound } from 'next/navigation';
 import { getException } from '@/app/lib/db';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
