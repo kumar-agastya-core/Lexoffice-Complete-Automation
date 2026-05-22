@@ -1,10 +1,32 @@
-// Queue stub — ioredis not available in Next.js edge/serverless
+// Queue stub — BullMQ/ioredis not available in Next.js context
 // Real queue operations happen in the worker service
 
 export type JobStatus = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed'
 
 export interface JobData {
   [key: string]: unknown
+}
+
+export type Queue = {
+  add: (_name: string, _data: JobData) => Promise<void>
+  resume: () => Promise<void>
+  pause: () => Promise<void>
+}
+
+// Stub queue instance
+const createStubQueue = (): Queue => ({
+  add: async () => {},
+  resume: async () => {},
+  pause: async () => {},
+})
+
+// Named exports expected by route handlers
+export function getResumeQueue(_queueName?: string): Queue {
+  return createStubQueue()
+}
+
+export function getExceptionQueue(): Queue {
+  return createStubQueue()
 }
 
 export async function enqueueJob(
