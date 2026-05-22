@@ -30,7 +30,7 @@ export default function ExceptionTable({ rows }: { rows: ExceptionRow[] }) {
     return (
       <div className="rounded-lg border border-dashed border-gray-300 bg-white py-16 text-center">
         <p className="text-lg font-medium text-gray-500">
-          No exceptions — all documents processed automatically ✓
+          No exceptions - all documents processed automatically
         </p>
         <p className="mt-1 text-sm text-gray-400">
           Healthy documents never appear here.
@@ -63,19 +63,19 @@ export default function ExceptionTable({ rows }: { rows: ExceptionRow[] }) {
               <tr key={row.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3">
                   <div className="font-medium text-gray-900 capitalize">
-                    {row.payload.source ?? 'unknown'}
+                    {String(row.payload.source ?? 'unknown')}
                   </div>
                   <div className="text-xs text-gray-400 font-mono truncate max-w-[120px]">
-                    {row.id.slice(0, 8)}…
+                    {row.id.slice(0, 8)}...
                   </div>
                 </td>
 
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1">
-                    {questions.map((q) => (
+                    {(questions as Array<{ triggerId: string; severity: string }>).map((q) => (
                       <TriggerPill key={q.triggerId} id={q.triggerId} severity={q.severity} />
                     ))}
-                    {questions.length === 0 && row.payload.triggerReasons.map((r) => (
+                    {(questions as unknown[]).length === 0 && (row.payload.triggerReasons as string[] | undefined ?? []).map((r) => (
                       <TriggerPill key={r} id={r} severity="warning" />
                     ))}
                   </div>
@@ -83,8 +83,8 @@ export default function ExceptionTable({ rows }: { rows: ExceptionRow[] }) {
 
                 <td className="px-4 py-3 text-gray-700">
                   {amount?.extractedAmount != null
-                    ? `€${Number(amount.extractedAmount).toFixed(2)}`
-                    : '—'}
+                    ? `${Number(amount.extractedAmount).toFixed(2)}`
+                    : '-'}
                 </td>
 
                 <td className="px-4 py-3 text-gray-500">
@@ -100,7 +100,7 @@ export default function ExceptionTable({ rows }: { rows: ExceptionRow[] }) {
                     href={`/exceptions/${row.id}`}
                     className="text-blue-600 hover:underline whitespace-nowrap"
                   >
-                    Review →
+                    Review
                   </a>
                 </td>
               </tr>
