@@ -7,20 +7,39 @@ export interface JobData {
   [key: string]: unknown
 }
 
-export type Queue = {
-  add: (_name: string, _data: JobData) => Promise<void>
-  resume: () => Promise<void>
-  pause: () => Promise<void>
+// Minimal Job interface matching BullMQ's Job shape
+export interface QueueJob {
+  id?: string | undefined
+  name: string
+  data: JobData
+  opts?: Record<string, unknown>
 }
 
-// Stub queue instance
+// Minimal Queue interface matching what route handlers call
+export interface Queue {
+  add: (_name: string, _data: JobData, _opts?: Record<string, unknown>) => Promise<QueueJob>
+  resume: () => Promise<void>
+  pause: () => Promise<void>
+  getWaiting: () => Promise<QueueJob[]>
+  getActive: () => Promise<QueueJob[]>
+  getCompleted: (_start?: number, _end?: number) => Promise<QueueJob[]>
+  getFailed: (_start?: number, _end?: number) => Promise<QueueJob[]>
+  getJobCounts: () => Promise<Record<string, number>>
+  close: () => Promise<void>
+}
+
 const createStubQueue = (): Queue => ({
-  add: async () => {},
+  add: async (_name, _data) => ({ name: _name, data: _data }),
   resume: async () => {},
   pause: async () => {},
+  getWaiting: async () => [],
+  getActive: async () => [],
+  getCompleted: async () => [],
+  getFailed: async () => [],
+  getJobCounts: async () => ({}),
+  close: async () => {},
 })
 
-// Named exports expected by route handlers
 export function getResumeQueue(_queueName?: string): Queue {
   return createStubQueue()
 }
