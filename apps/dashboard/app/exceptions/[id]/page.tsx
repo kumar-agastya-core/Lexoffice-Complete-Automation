@@ -60,7 +60,7 @@ export default async function ExceptionDetailPage({
                 <div>
                   <CardTitle className="text-lg">
                     {(plan.extractedVendorName as string | undefined) ??
-                      exception.payload.triggerReasons?.[0] ??
+                      (payload.triggerReasons as string[] | undefined)?.[0] ??
                       'Unbekanntes Dokument'}
                   </CardTitle>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
