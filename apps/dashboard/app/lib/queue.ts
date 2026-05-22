@@ -1,14 +1,22 @@
-import { Queue } from 'bullmq';
-import IORedis from 'ioredis';
+// Queue stub — ioredis not available in Next.js edge/serverless
+// Real queue operations happen in the worker service
 
-let resumeQueue: Queue | undefined;
+export type JobStatus = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed'
 
-export function getResumeQueue(): Queue {
-  if (!resumeQueue) {
-    const connection = new IORedis(process.env.REDIS_URL ?? 'redis://localhost:6379', {
-      maxRetriesPerRequest: null,
-    });
-    resumeQueue = new Queue('resume', { connection });
-  }
-  return resumeQueue;
+export interface JobData {
+  [key: string]: unknown
+}
+
+export async function enqueueJob(
+  _queueName: string,
+  _data: JobData,
+): Promise<void> {
+  // Stub: queue not available in Next.js context
+}
+
+export async function getJobStatus(
+  _queueName: string,
+  _jobId: string,
+): Promise<JobStatus | null> {
+  return null
 }
